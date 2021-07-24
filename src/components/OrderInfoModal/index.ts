@@ -1,1 +1,0 @@
-export { OrderInfoModal } from "./OrderInfoModal";
