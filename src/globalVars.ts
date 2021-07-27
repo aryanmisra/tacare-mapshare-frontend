@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 export const isTest = process.env.REACT_APP_ENVIRONMENT === "production" ? false : true;
 
-export const api = isTest ? "http://localhost:5000" : "https://api.bitswap.network/";
+export const api = isTest ? "http://localhost:5000" : "https://tacare-api.herokuapp.com/";
 
 export const parseNum = (val: string) => val.replace(/^\$/, "");
 export const regEmail =
