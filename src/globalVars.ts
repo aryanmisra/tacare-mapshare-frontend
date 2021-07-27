@@ -2,26 +2,11 @@ import { useEffect, useRef } from "react";
 
 export const isTest = process.env.REACT_APP_ENVIRONMENT === "production" ? false : true;
 
-export const api = isTest ? "https://bitswap-core-api-staging.herokuapp.com/" : "https://api.bitswap.network/";
-export const identityURL = "https://identity.bitclout.com";
-
-export const etherscanPrefix = isTest ? "kovan." : "";
-
-export const BITCLOUT = "CLOUT";
-export const ETHER = "ETH";
-export const USDC = "USDC";
-
-export const UNVERIFIED_MAX_USD_LIMIT = 2000;
-export const UNVERIFIED_WITHDRAW_LIMIT = 2000;
-export const BITCLOUT_LOGO = "./bitcloutLogo.png";
-export const ETHER_LOGO = "./etherLogo.png";
-export const USDC_LOGO = "./usdcLogo.png";
-
-export const MAX_LIMIT = 1000;
-export const MIN_LIMIT = 0.01;
-export const ROUNDING_PRECISION = 6;
+export const api = isTest ? "http://localhost:5000" : "https://api.bitswap.network/";
 
 export const parseNum = (val: string) => val.replace(/^\$/, "");
+export const regEmail =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const epochs: [string, number][] = [
     ["year", 31536000],
@@ -39,21 +24,9 @@ export function timeSince(date: Date) {
     return interval && count ? `${count} ${interval[0]}${count !== 1 ? "s" : ""} ago` : "<1 second ago";
 }
 
-export const formatBalanceSmall = (balance: number) => {
-    return +balance?.toFixed(2);
-};
-export const formatBalanceLarge = (balance: number) => {
-    return +balance?.toFixed(ROUNDING_PRECISION);
-};
-
-export const formateDateTime = (date: Date) => {
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-};
-
 export const capFirst = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
-export const zip = (a1: Array<any>, a2: Array<any>) => a1.map((x, i) => [x, a2[i]]);
 
 export function useInterval(callback: () => void, delay: number | null) {
     const savedCallback = useRef(callback);

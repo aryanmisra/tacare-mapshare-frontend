@@ -8,7 +8,7 @@ const config: ThemeConfig = {
     initialColorMode: "light",
     useSystemColorMode: false,
 };
-export const bitswapTheme = extendTheme({
+export const tacareMapShareTheme = extendTheme({
     config,
     styles: {
         global: {

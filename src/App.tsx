@@ -1,55 +1,42 @@
-import React, {ReactElement, Suspense} from "react";
-import {Box, Container, ChakraProvider} from "@chakra-ui/react";
-import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
-import {RecoilRoot} from "recoil";
+import React, { ReactElement, Suspense } from "react";
+import { Box, Container, ChakraProvider } from "@chakra-ui/react";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
-import {bitswapTheme} from "./theme";
+import { tacareMapShareTheme } from "./theme";
 
-import {Home} from "./pages/Home";
-import {Login} from "./pages/Login";
-import {Profile} from "./pages/Profile";
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
+import { Profile } from "./pages/Profile";
 
-import {DefaultNavBar, NavBar} from "./components/NavBar";
-import {PrivateRoute} from "./components/PrivateRoute";
+import { DefaultNavBar, NavBar } from "./components/NavBar";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { loadCss } from "esri-loader";
 
 import * as config from "./globalVars";
-import {identityHandler} from "./services/identity";
-
-window.addEventListener("message", identityHandler);
-
-if (!localStorage.getItem("nulledState")) {
-    console.log("nulling");
-    localStorage.clear();
-    localStorage.setItem("nulledState", JSON.stringify(true));
-}
 
 export const App = (): ReactElement => {
+    loadCss();
     return (
         <>
-            <iframe
-                id="identity"
-                frameBorder="0"
-                src={`${config.identityURL}/embed`}
-                style={{
-                    height: "100vh",
-                    width: "100vw",
-                    display: "none",
-                }}
-            />
             <RecoilRoot>
-                <ChakraProvider theme={bitswapTheme} resetCSS>
+                <ChakraProvider theme={tacareMapShareTheme} resetCSS>
                     <BrowserRouter>
                         {/* TODO: implement auth to set loggedOut */}
                         <Suspense fallback={DefaultNavBar()}>
                             <NavBar />
                         </Suspense>
 
-                        <Box p={{base: 4, md: 8}}>
+                        <Box p={{ base: 4, md: 8 }}>
                             <Suspense fallback={<></>}>
                                 <Container maxW="container.xl">
                                     <Switch>
                                         <Route path="/login">
                                             <Login />
+                                        </Route>
+                                        <Route path="/register">
+                                            <Register />
                                         </Route>
 
                                         <PrivateRoute path="/profile">

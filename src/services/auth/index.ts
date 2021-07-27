@@ -10,32 +10,25 @@ export const verifyToken = async () => {
     }
 };
 
-export const login = async (publicKey: string, identityJWT: string) => {
+export const login = async (email: string, password: string) => {
     return await client
         .post("/auth/login", {
-            publicKey: publicKey,
-            identityJWT: identityJWT,
+            email: email,
+            password: password,
         })
         .then((response) => {
             if (response.status === 200) {
-                saveData("publicKey", response.data.wallet.bitclout.publicKey);
-                saveData("user", response.data.user);
                 saveData("token", response.data.token);
             }
         });
 };
 
-export const fetchBitcloutProfile = async (publicKey: string, username?: string) => {
-    return await client.post("/auth/fetch-profile", {
-        publicKey: publicKey,
-        username: username ? username : "",
-    });
-};
-
-export const register = async (publicKey: string, email: string, name: string) => {
+export const register = async (firstName: string, lastName: string, userType: string, email: string, password: string) => {
     return await client.put("/auth/register", {
-        publicKey: publicKey,
+        firstName: firstName,
+        lastName: lastName,
+        userType: userType,
         email: email,
-        name: name,
+        password: password,
     });
 };
