@@ -50,13 +50,13 @@ export default class GlobeMap extends React.Component {
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.handleFail = this.handleFail.bind(this);
-        this.handlePointerMove = this.handlePointerMove.bind(this);
+        // this.handlePointerMove = this.handlePointerMove.bind(this);
     }
 
     render() {
         return (
             <Scene
-                onPointerMove={this.handlePointerMove}
+                // onPointerMove={this.handlePointerMove}
                 onLoad={this.handleMapLoad}
                 onFail={this.handleFail}
                 mapProperties={{ basemap: "national-geographic" }}
@@ -81,12 +81,12 @@ export default class GlobeMap extends React.Component {
         console.error(e);
         this.setState({ status: "failed" });
     }
-    handlePointerMove(e: any) {
-        this.state.view.hitTest(e).then((e) => {
-            e.results.length > 0 &&
-                e.results.forEach((result: any) => {
-                    console.log(result.graphic);
-                });
-        });
-    }
+    // handlePointerMove(e: any) {
+    //     this.state.view.hitTest(e).then((e) => {
+    //         e.results.length > 0 &&
+    //             e.results.forEach((result: any) => {
+    //                 console.log(result.graphic);
+    //             });
+    //     });
+    // }
 }

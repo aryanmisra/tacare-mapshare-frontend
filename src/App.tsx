@@ -8,7 +8,6 @@ import { tacareMapShareTheme } from "./theme";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
-import { Profile } from "./pages/Profile";
 
 import { DefaultNavBar, NavBar } from "./components/NavBar";
 import { PrivateRoute } from "./components/PrivateRoute";
@@ -38,10 +37,6 @@ export const App = (): ReactElement => {
                                         <Route path="/register">
                                             <Register />
                                         </Route>
-
-                                        <PrivateRoute path="/profile">
-                                            <Profile />
-                                        </PrivateRoute>
                                         <Route path="/home">
                                             <Redirect to="/" />
                                         </Route>
