@@ -6,9 +6,84 @@ import { resourceLimits } from "worker_threads";
 
 const EastChimpanzeeFeatureLayer = (props: any) => {
     const ChimpPopup = {
-        "title": "Chimpanzee Reservation {ID_NO}",
-        "content": "<b>ID:</b> {ID_NO}<br><b>Assessment:</b> {ASSESSMENT}<br><b>Binomal:</b> {BINOMIAL}<br><b>Citation:</b> {CITATION}<br><b>Compiler:</b> {COMPILER}<br><b>Subspecies:</b> {SUBSPECIES}<br><b>Year:</b> {YEAR}"
-    }
+        "title": "Chimpanzee Reservation ID #{ID_NO}",
+        "spinnerEnabled":true,
+        "content": [{
+            "type": "fields",
+            "fieldInfos": [
+              {
+                "fieldName": "ASSESSMENT",
+                "label": "Assessment",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": null,
+                "stringFieldOption": "text-box"
+              },
+              {
+                "fieldName": "BINOMIAL",
+                "label": "Binomial",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": null,
+                "stringFieldOption": "text-box"
+              },
+  
+              {
+                "fieldName": "CITATION",
+                "label": "Citation",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                },
+  
+                "stringFieldOption": "text-box"
+              },
+              {
+                "fieldName": "COMPILER",
+                "label": "Compiler",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                },
+  
+                "stringFieldOption": "text-box"
+              },
+              {
+                "fieldName": "SUBSPECIES",
+                "label": "Subspecies",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                },
+  
+                "stringFieldOption": "text-box"
+              },
+              {
+                "fieldName": "YEAR",
+                "label": "Year",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": {
+                  "places": 2,
+                  "digitSeparator": true
+                },
+  
+                "stringFieldOption": "text-box"
+              }
+            ]
+          }]}
     const [layer, setLayer] = useState(null);
     useEffect(() => {
         loadModules(["esri/layers/FeatureLayer"])
