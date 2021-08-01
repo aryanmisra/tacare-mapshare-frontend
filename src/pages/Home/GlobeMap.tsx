@@ -5,12 +5,18 @@ import Feature from "esri/widgets/Feature";
 import { resourceLimits } from "worker_threads";
 
 const EastChimpanzeeFeatureLayer = (props: any) => {
+    const ChimpPopup = {
+        "title": "Chimpanzee Reservation {ID_NO}",
+        "content": "<b>ID:</b> {ID_NO}<br><b>Assessment:</b> {ASSESSMENT}<br><b>Binomal:</b> {BINOMIAL}<br><b>Citation:</b> {CITATION}<br><b>Compiler:</b> {COMPILER}<br><b>Subspecies:</b> {SUBSPECIES}<br><b>Year:</b> {YEAR}"
+    }
     const [layer, setLayer] = useState(null);
     useEffect(() => {
         loadModules(["esri/layers/FeatureLayer"])
             .then(([FeatureLayer]) => {
                 const easternChimpanzeeLayer = new FeatureLayer({
                     url: props.featureLayerProperties.url,
+                    popupTemplate: ChimpPopup,
+                    outFields: ["ASSESSMENT","BINOMIAL","CITATION","COMPILER","ID_NO", "SUBSPECIES", "YEAR",],
                     title: "Monkeys",
                     editingEnabled: true,
                     labelingInfo: [
@@ -18,7 +24,6 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                             labelExpressionInfo: { expression: "$feature.ID_NO" },
                             symbol: {
                                 type: "text",
-
                                 color: "black",
                                 haloSize: 1,
                                 haloColor: "white",
@@ -26,7 +31,6 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                         },
                     ],
                 });
-
                 setLayer(easternChimpanzeeLayer);
                 props.map.add(easternChimpanzeeLayer);
             })
@@ -52,7 +56,6 @@ export default class GlobeMap extends React.Component {
         this.handleFail = this.handleFail.bind(this);
         // this.handlePointerMove = this.handlePointerMove.bind(this);
     }
-
     render() {
         return (
             <Scene
@@ -81,12 +84,4 @@ export default class GlobeMap extends React.Component {
         console.error(e);
         this.setState({ status: "failed" });
     }
-    // handlePointerMove(e: any) {
-    //     this.state.view.hitTest(e).then((e) => {
-    //         e.results.length > 0 &&
-    //             e.results.forEach((result: any) => {
-    //                 console.log(result.graphic);
-    //             });
-    //     });
-    // }
 }
