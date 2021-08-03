@@ -48,3 +48,83 @@ export function useInterval(callback: () => void, delay: number | null) {
         return () => clearInterval(id);
     }, [delay]);
 }
+
+export const ChimpLayerWidgetConfig = {
+    "title": "Chimpanzee Reservation ID #{ID_NO}",
+    "spinnerEnabled":true,
+    "content": [{
+        "type": "fields",
+        "fieldInfos": [
+          {
+            "fieldName": "ASSESSMENT",
+            "label": "Assessment",
+            "isEditable": true,
+            "tooltip": "",
+            "visible": true,
+            "format": null,
+            "stringFieldOption": "text-box"
+          },
+          {
+            "fieldName": "BINOMIAL",
+            "label": "Binomial",
+            "isEditable": true,
+            "tooltip": "",
+            "visible": true,
+            "format": null,
+            "stringFieldOption": "text-box"
+          },
+
+          {
+            "fieldName": "CITATION",
+            "label": "Citation",
+            "isEditable": true,
+            "tooltip": "",
+            "visible": true,
+            "format": {
+              "places": 2,
+              "digitSeparator": true
+            },
+
+            "stringFieldOption": "text-box"
+          },
+          {
+            "fieldName": "COMPILER",
+            "label": "Compiler",
+            "isEditable": true,
+            "tooltip": "",
+            "visible": true,
+            "format": {
+              "places": 2,
+              "digitSeparator": true
+            },
+
+            "stringFieldOption": "text-box"
+          },
+          {
+            "fieldName": "SUBSPECIES",
+            "label": "Subspecies",
+            "isEditable": true,
+            "tooltip": "",
+            "visible": true,
+            "format": {
+              "places": 2,
+              "digitSeparator": true
+            },
+
+            "stringFieldOption": "text-box"
+          },
+          {
+            "fieldName": "YEAR",
+            "label": "Year",
+            "isEditable": true,
+            "tooltip": "",
+            "visible": true,
+            "format": {
+              "places": 2,
+              "digitSeparator": true
+            },
+
+            "stringFieldOption": "text-box"
+          }
+        ]
+      }]}

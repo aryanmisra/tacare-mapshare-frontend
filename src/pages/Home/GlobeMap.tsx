@@ -1,99 +1,26 @@
-import React, { useState, useEffect, ReactElement } from "react";
+import React, { useState, useEffect } from "react";
 import { loadModules } from "esri-loader";
 import { Scene } from "@esri/react-arcgis";
-import Feature from "esri/widgets/Feature";
-import { resourceLimits } from "worker_threads";
+// import Feature from "esri/widgets/Feature";
+// import { resourceLimits } from "worker_threads";
+import * as globalVars from "../../globalVars"
 
+interface globeState {
+  status: string;
+  map: any | null;
+  view: any | null;
+}
 
-let easternChimpanzeeLayer;
+let easternChimpanzeeLayer:any;
 
 const EastChimpanzeeFeatureLayer = (props: any) => {
-    const ChimpPopup = {
-        "title": "Chimpanzee Reservation ID #{ID_NO}",
-        "spinnerEnabled":true,
-        "content": [{
-            "type": "fields",
-            "fieldInfos": [
-              {
-                "fieldName": "ASSESSMENT",
-                "label": "Assessment",
-                "isEditable": true,
-                "tooltip": "",
-                "visible": true,
-                "format": null,
-                "stringFieldOption": "text-box"
-              },
-              {
-                "fieldName": "BINOMIAL",
-                "label": "Binomial",
-                "isEditable": true,
-                "tooltip": "",
-                "visible": true,
-                "format": null,
-                "stringFieldOption": "text-box"
-              },
-  
-              {
-                "fieldName": "CITATION",
-                "label": "Citation",
-                "isEditable": true,
-                "tooltip": "",
-                "visible": true,
-                "format": {
-                  "places": 2,
-                  "digitSeparator": true
-                },
-  
-                "stringFieldOption": "text-box"
-              },
-              {
-                "fieldName": "COMPILER",
-                "label": "Compiler",
-                "isEditable": true,
-                "tooltip": "",
-                "visible": true,
-                "format": {
-                  "places": 2,
-                  "digitSeparator": true
-                },
-  
-                "stringFieldOption": "text-box"
-              },
-              {
-                "fieldName": "SUBSPECIES",
-                "label": "Subspecies",
-                "isEditable": true,
-                "tooltip": "",
-                "visible": true,
-                "format": {
-                  "places": 2,
-                  "digitSeparator": true
-                },
-  
-                "stringFieldOption": "text-box"
-              },
-              {
-                "fieldName": "YEAR",
-                "label": "Year",
-                "isEditable": true,
-                "tooltip": "",
-                "visible": true,
-                "format": {
-                  "places": 2,
-                  "digitSeparator": true
-                },
-  
-                "stringFieldOption": "text-box"
-              }
-            ]
-          }]}
     const [layer, setLayer] = useState(null);
     useEffect(() => {
         loadModules(["esri/layers/FeatureLayer"])
             .then(([FeatureLayer]) => {
                 easternChimpanzeeLayer = new FeatureLayer({
                     url: props.featureLayerProperties.url,
-                    popupTemplate: ChimpPopup,
+                    popupTemplate: globalVars.ChimpLayerWidgetConfig,
                     outFields: ["ASSESSMENT","BINOMIAL","CITATION","COMPILER","ID_NO", "SUBSPECIES", "YEAR",],
                     title: "Monkeys",
                     editingEnabled: true,
@@ -122,7 +49,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
     return null;
 };
 
-export default class GlobeMap extends React.Component {
+export default class GlobeMap extends React.Component<any, globeState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -132,34 +59,37 @@ export default class GlobeMap extends React.Component {
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.handleFail = this.handleFail.bind(this);
-        // this.handlePointerMove = this.handlePointerMove.bind(this);
     }
+
     componentDidUpdate() {
+      // if the view exists
       if (this.state.view) {
+        // load the editor widget
         loadModules(["esri/widgets/Editor"]).then(([Editor]) => {
           const editor = new Editor({
             view: this.state.view
           });
-          // Add widget to the view
+          // add widget to the view
           this.state.view.ui.add(editor, "top-right");
         })
-        this.state.view.on("click", (event) => {
+        // add a layer click listener 
+        this.state.view.on("click", (event:any) => {
           const opts = {
             include: easternChimpanzeeLayer
           }
-          this.state.view.hitTest(event, opts).then(function(response) {
+          this.state.view.hitTest(event, opts).then(function(response:any) {
             if (response.results.length) {
-              // attributes can be accessed here
+              // attributes of a clicked layer can be accessed here
               console.log(response.results[0].graphic.attributes)
             }
           });
         });
       }
     }
+
     render() {
         return (
             <Scene
-                // onPointerMove={this.handlePointerMove}
                 onLoad={this.handleMapLoad}
                 onFail={this.handleFail}
                 mapProperties={{ basemap: "national-geographic" }}
@@ -176,6 +106,7 @@ export default class GlobeMap extends React.Component {
             </Scene>
         );
     }
+
     handleMapLoad(map: any, view: any) {
         this.setState({ map: map, view: view, status: "loaded" });
     }
