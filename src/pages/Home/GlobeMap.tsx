@@ -136,6 +136,13 @@ export default class GlobeMap extends React.Component {
     }
     componentDidUpdate() {
       if (this.state.view) {
+        loadModules(["esri/widgets/Editor"]).then(([Editor]) => {
+          const editor = new Editor({
+            view: this.state.view
+          });
+          // Add widget to the view
+          this.state.view.ui.add(editor, "top-right");
+        })
         this.state.view.on("click", (event) => {
           const opts = {
             include: easternChimpanzeeLayer
