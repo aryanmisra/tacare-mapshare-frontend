@@ -4,6 +4,9 @@ import { Scene } from "@esri/react-arcgis";
 import Feature from "esri/widgets/Feature";
 import { resourceLimits } from "worker_threads";
 
+
+let easternChimpanzeeLayer;
+
 const EastChimpanzeeFeatureLayer = (props: any) => {
     const ChimpPopup = {
         "title": "Chimpanzee Reservation ID #{ID_NO}",
@@ -88,7 +91,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
     useEffect(() => {
         loadModules(["esri/layers/FeatureLayer"])
             .then(([FeatureLayer]) => {
-                const easternChimpanzeeLayer = new FeatureLayer({
+                easternChimpanzeeLayer = new FeatureLayer({
                     url: props.featureLayerProperties.url,
                     popupTemplate: ChimpPopup,
                     outFields: ["ASSESSMENT","BINOMIAL","CITATION","COMPILER","ID_NO", "SUBSPECIES", "YEAR",],
@@ -130,6 +133,21 @@ export default class GlobeMap extends React.Component {
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.handleFail = this.handleFail.bind(this);
         // this.handlePointerMove = this.handlePointerMove.bind(this);
+    }
+    componentDidUpdate() {
+      if (this.state.view) {
+        this.state.view.on("click", (event) => {
+          const opts = {
+            include: easternChimpanzeeLayer
+          }
+          this.state.view.hitTest(event, opts).then(function(response) {
+            if (response.results.length) {
+              // attributes can be accessed here
+              console.log(response.results[0].graphic.attributes)
+            }
+          });
+        });
+      }
     }
     render() {
         return (
