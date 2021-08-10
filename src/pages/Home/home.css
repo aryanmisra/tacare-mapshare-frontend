@@ -1,6 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
 html, body {
     padding:0;
     margin:0;
+}
+
+* {
+    font-family: 'Questrial', sans-serif;
+}
+
+:root {
+    --white:#FFFFFF;
+  --green:#55B259;
+  --red:#E47272;
+  --gray1:#4F535B;
+  --gray2:#2a2b2e;
+  --gray3:#202124;
+  --blue1:#8AB4F8;
+  --blue2:#5C88D0;
 }
 
 /* esri override */
@@ -20,9 +37,16 @@ html, body {
 }
 
 .esri-view .esri-ui-top-right {
-    top:10px !important;
-    right:15px !important;
+    top:auto;
+    left:auto;
+    bottom:60px !important;
+    right:75px !important;
 }
+
+.esri-view .esri-ui-top-right .esri-editor, .esri-widget--button, .esri-zoom, .esri-navigation-toggle {
+    border-radius: 5px !important;
+}
+
 
 .body-container {
     position: absolute;
@@ -36,4 +60,96 @@ html, body {
     z-index: 0;
     width: 100vw;
     height: 100vh;
+}
+
+.navbar-container {
+    position: fixed;
+    top:0;
+    left:0; 
+    width: 55px;
+    background-color:var(--gray2);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.4vh 0;
+    z-index: 100;
+}
+
+.link-container {
+    width:50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-container {
+    position: fixed;
+    top:0;
+    transition: 1s cubic-bezier(.69,.09,.37,.94);
+    width: 425px;
+    background-color:var(--gray3);
+    height: 100vh;
+    z-index: 50;
+}
+
+.title-container {
+    position: fixed;
+    top:20px;
+    left:90px; 
+    color:white;
+}
+
+.title-container h1 {
+    font-size: 30px;
+}
+
+.title-container h2 {
+    font-size: 16px;
+}
+
+.login-container {
+    position: fixed;
+    top:30px;
+    right:30px; 
+}
+
+.login-container button {
+    background-color: var(--gray3);
+    padding:0 20px;
+    height: 45px;
+    border-radius: 5px;
+    font-size: 18px;
+    color: var(--white);
+}
+
+.species-card-container {
+    position: fixed;
+    top:150px;
+    right:30px;
+    width: 300px;
+    background-color: var(--gray3);
+    border-radius: 10px;
+    padding-bottom: 20px;
+}
+
+.species-card-container img {
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+    height: 150px;
+}
+
+.modify-layer-container {
+    position: fixed;
+    right: 90px;
+    bottom: 30px;
+}
+.modify-layer-container button {
+    background-color: var(--gray3);
+    width: 300px;
+    height: 50px;
+    border-radius: 5px;
+    font-size: 20px;
+    color: var(--white);
 }

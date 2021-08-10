@@ -117,7 +117,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
         this.setState({ map: map, view: view, status: "loaded" });
         setTimeout(() => {
             this.props.setLoaded(true)
-        }, 0);
+        }, 2500);
     }
 
     handleFail(e: any) {
