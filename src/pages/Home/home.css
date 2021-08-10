@@ -47,6 +47,30 @@ html, body {
     border-radius: 5px !important;
 }
 
+.esri-popup__main-container {
+    border-radius: 5px !important;
+    background-color: var(--gray2) !important;
+}
+
+.esri-popup__button:hover, .esri-popup__header-container--button:hover{
+    background-color: var(--gray3) !important;
+}
+
+.esri-popup__main-container *, .esri-ui-top-left .esri-icon, .esri-navigation-toggle__button, .esri-compass, .esri-ui-top-right *{
+    color:var(--white) !important;
+}
+
+.esri-feature__main-container, .esri-popup__navigation, .esri-popup__pointer-direction, .esri-ui-top-left *, .esri-ui-top-right *{
+    background-color: var(--gray2) !important;
+}
+
+.esri-popup--is-docked-top-right {
+    position: fixed !important;
+    top:auto !important;
+    right:auto !important;
+    bottom:0px !important;
+    left:70px !important;
+}
 
 .body-container {
     position: absolute;
@@ -126,7 +150,7 @@ html, body {
 
 .species-card-container {
     position: fixed;
-    top:150px;
+    top:100px;
     right:30px;
     width: 300px;
     background-color: var(--gray3);
