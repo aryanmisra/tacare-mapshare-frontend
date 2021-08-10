@@ -49,6 +49,17 @@ export function useInterval(callback: () => void, delay: number | null) {
     }, [delay]);
 }
 
+export const colors = {
+  white:"#FFFFFF",
+  green:"#55B259",
+  red:"#E47272",
+  gray1:"#4F535B",
+  gray2:"#303235",
+  gray3:"#202124",
+  blue1:"#8AB4F8",
+  blue2:"#5C88D0",
+}
+
 export const ChimpLayerWidgetConfig = {
     "title": "Chimpanzee Reservation ID #{ID_NO}",
     "spinnerEnabled":true,

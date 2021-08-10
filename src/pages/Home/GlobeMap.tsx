@@ -9,12 +9,14 @@ interface globeState {
   status: string;
   map: any | null;
   view: any | null;
+  editorLoaded: boolean;
 }
 
 let easternChimpanzeeLayer:any;
 
 const EastChimpanzeeFeatureLayer = (props: any) => {
     const [layer, setLayer] = useState(null);
+
     useEffect(() => {
         loadModules(["esri/layers/FeatureLayer"])
             .then(([FeatureLayer]) => {
@@ -56,6 +58,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
             status: "loading",
             map: null,
             view: null,
+            editorLoaded:false,
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.handleFail = this.handleFail.bind(this);
@@ -70,7 +73,10 @@ export default class GlobeMap extends React.Component<any, globeState> {
             view: this.state.view
           });
           // add widget to the view
-          this.state.view.ui.add(editor, "top-right");
+          if (!this.state.editorLoaded) {
+            this.state.view.ui.add(editor, "top-right");
+            this.setState({editorLoaded:true})
+          }
         })
         // add a layer click listener 
         this.state.view.on("click", (event:any) => {
@@ -92,10 +98,10 @@ export default class GlobeMap extends React.Component<any, globeState> {
             <Scene
                 onLoad={this.handleMapLoad}
                 onFail={this.handleFail}
-                mapProperties={{ basemap: "national-geographic" }}
+                mapProperties={{ basemap: "national-geographic", }}
                 viewProperties={{
-                    center: [-70, 25],
-                    zoom: 4,
+                    center: [18, 5],
+                    zoom: 1,
                 }}
             >
                 <EastChimpanzeeFeatureLayer
@@ -109,6 +115,9 @@ export default class GlobeMap extends React.Component<any, globeState> {
 
     handleMapLoad(map: any, view: any) {
         this.setState({ map: map, view: view, status: "loaded" });
+        setTimeout(() => {
+            this.props.setLoaded(true)
+        }, 0);
     }
 
     handleFail(e: any) {

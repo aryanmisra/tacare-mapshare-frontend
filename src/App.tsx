@@ -23,11 +23,11 @@ export const App = (): ReactElement => {
                 <ChakraProvider theme={tacareMapShareTheme} resetCSS>
                     <BrowserRouter>
                         {/* TODO: implement auth to set loggedOut */}
-                        <Suspense fallback={DefaultNavBar()}>
+                        {/* <Suspense fallback={DefaultNavBar()}>
                             <NavBar />
-                        </Suspense>
+                        </Suspense> */}
 
-                        <Box p={{ base: 4, md: 8 }}>
+                        {/* <Box p={{ base: 4, md: 8 }}> */}
                             <Suspense fallback={<></>}>
                                 <Container maxW="container.xl">
                                     <Switch>
@@ -46,7 +46,7 @@ export const App = (): ReactElement => {
                                     </Switch>
                                 </Container>
                             </Suspense>
-                        </Box>
+                        {/* </Box> */}
                     </BrowserRouter>
                 </ChakraProvider>
             </RecoilRoot>
