@@ -9,6 +9,28 @@ html, body {
     font-family: 'Questrial', sans-serif;
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgb(54, 54, 54);
+    border-radius: 8px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
 :root {
     --white:#FFFFFF;
   --green:#55B259;
@@ -141,11 +163,13 @@ html, body {
 .sidebar-container {
     position: fixed;
     top:0;
-    transition: 1s cubic-bezier(.69,.09,.37,.94);
+    transition: 0.7s cubic-bezier(.33,.59,.43,1);
     width: 425px;
     background-color:var(--gray3);
     height: 100vh;
     z-index: 50;
+    -webkit-box-shadow: 12px 0px 19px -1px rgba(0,0,0,0.27); 
+    box-shadow: 12px 0px 19px -1px rgba(0,0,0,0.27);
 }
 
 .title-container {
@@ -202,7 +226,7 @@ html, body {
     height: 40px;
     background-color: var(--gray3);
     border-radius: 40px;
-    transition: 0.2s cubic-bezier(.69,.09,.37,.94);
+    transition: 0.15s cubic-bezier(.69,.09,.37,.94);
     transition-delay: 0.7s;
 }
 

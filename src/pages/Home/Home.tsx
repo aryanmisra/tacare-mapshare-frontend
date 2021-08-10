@@ -12,31 +12,58 @@ import {FiMail} from "react-icons/fi"
 import SidebarMenu1 from "./sidebarMenu1";
 import SidebarMenu2 from "./sidebarMenu2";
 import SidebarMenu3 from "./sidebarMenu3";
+import SidebarMenu4 from "./sidebarMenu4";
+// import { tokenState } from "../../store";
+import { useRecoilValue } from "recoil";
+
+
 import "./home.css"
 
 export function Home(): React.ReactElement {
     const [loaded, setLoaded] = useState(false);
     const [currentSpecies, setCurrentSpecies] = useState({name:"The West African Chimpanzee", image:"https://i.ibb.co/F5GDpBL/image-16.png", count:1532, description:"Nam non elementum odio. Phasellus consequat, felis sed pulvinar accumsan, nisl tellus convallis orci, quis gravida augue diam ac magna. Aliquam interdum ut nibh ut blandit. In congue justo et mi blandit condimentum. Donec odio est, semper nec condimentum sagittis."});
     const [menuMode, setMenuMode] = useState(-1);
-    const [sidebarOpen, setSidebarOpen] = useState([-500, -500, -500]);
+    const [userType, setuserType] = useState("admin");
+    // const token = useRecoilValue(tokenState);
+    // const { user, userIsLoading, userIsError } = useUser(token);
+    const [currentBranch, setCurrentBranch] = useState(null);
+    const [sidebarOpen, setSidebarOpen] = useState([-500, -500, -500, -500]);
     const [mapEditMode, setMapEditMode] = useState(false)
     const [speciesCardOpen, setSpeciesCardOpen] = useState(true)
 
     useEffect(()=>{
         if (menuMode == -1) {
-            setSidebarOpen([-500, -500, -500])
+            setSidebarOpen([-500, -500, -500, -500])
         }
         else if (menuMode == 0) {
-            setSidebarOpen([55, -500, -500])
+            setSidebarOpen([55, -500, -500, -500])
         }
         else if (menuMode == 1) {
-            setSidebarOpen([-500, 55, -500])
+            setSidebarOpen([-500, 55, -500, -500])
+        }
+        else if (menuMode == 2) {
+            setSidebarOpen([-500, -500, 55, -500])
         }
         else {
-            setSidebarOpen([-500, -500, 55])
+            setSidebarOpen([-500, 55, -500, 55])
         }
+        // console.log(user)
     },[menuMode])
 
+    const branches = [
+        {name:"branch #2423", author:"eshwar", status:0},
+        {name:"branch #123", author:"eshwar", status:0},
+        {name:"branch #324234", author:"eshwar", status:1},
+        {name:"branch #234423", author:"eshwar", status:2},
+        {name:"branch #1232423", author:"eshwar", status:0},
+        {name:"branch #212423", author:"eshwar", status:0},
+        {name:"branch #3331", author:"asd", status:0},
+        {name:"branch #23", author:"asd", status:0},
+        {name:"branch #1233", author:"asd", status:1},
+        {name:"branch #3456", author:"asd", status:0},
+        {name:"branch #2133", author:"asd", status:2},
+        {name:"branch #52456", author:"asd", status:2},
+    ]
     return (
         <>
             <div style={{pointerEvents:!loaded?'auto':'none', opacity:!loaded?1:0, transition: '0.5s cubic-bezier(.69,.09,.37,.94)'}} className="loading-container">
@@ -54,7 +81,7 @@ export function Home(): React.ReactElement {
                 <div className="navbar-container">
                     <div className="link-container">
                         <BiMenu color={menuMode==0?globalVars.colors.blue1:globalVars.colors.white}  size={30} style={{cursor:'pointer', transition: '0.3s'}} onClick={()=>menuMode==0?setMenuMode(-1):setMenuMode(0)}/>
-                        <BiGitBranch color={menuMode==1?globalVars.colors.blue1:globalVars.colors.white}  size={26} style={{marginTop:25, cursor:'pointer', transition: '0.3s'}} onClick={()=>menuMode==1?setMenuMode(-1):setMenuMode(1)}/>
+                        <BiGitBranch color={menuMode==1 || menuMode==3?globalVars.colors.blue1:globalVars.colors.white}  size={26} style={{marginTop:25, cursor:'pointer', transition: '0.3s'}} onClick={()=>menuMode==1?setMenuMode(-1):setMenuMode(1)}/>
                         <HiOutlineDocumentDuplicate color={menuMode==2?globalVars.colors.blue1:globalVars.colors.white}  size={28} style={{marginTop:25, cursor:'pointer', transition: '0.3s'}} onClick={()=>menuMode==2?setMenuMode(-1):setMenuMode(2)}/>
                     </div>
                     <div className="link-container">
@@ -63,9 +90,10 @@ export function Home(): React.ReactElement {
                         <FiMail color="white"  size={28} style={{marginTop:25, cursor:'pointer'}} onClick={()=> window.location.href = "mailto:eshchock1@gmail.com"}/>
                     </div>
                 </div>
-                <div id="sidebar-container1" className="sidebar-container" style={{marginLeft:sidebarOpen[0]}}><SidebarMenu1/></div>
-                <div id="sidebar-container2" className="sidebar-container" style={{marginLeft:sidebarOpen[1]}}><SidebarMenu2/></div>
-                <div id="sidebar-container3" className="sidebar-container" style={{marginLeft:sidebarOpen[2]}}><SidebarMenu3/></div>
+                <div id="sidebar-container1" className="sidebar-container" style={{marginLeft:sidebarOpen[0]}}><SidebarMenu1 userType={userType}/></div>
+                <div id="sidebar-container2" className="sidebar-container" style={{marginLeft:sidebarOpen[1]}}><SidebarMenu2 currentBranch={currentBranch} setCurrentBranch={setCurrentBranch} setMenuMode={setMenuMode} branches={branches} userType={userType}/></div>
+                <div id="sidebar-container3" className="sidebar-container" style={{marginLeft:sidebarOpen[2]}}><SidebarMenu3 branches={branches} userType={userType}/></div>
+                <div id="sidebar-container4" className="sidebar-container" style={{marginLeft:sidebarOpen[3]}}><SidebarMenu4 currentBranch={currentBranch} setCurrentBranch={setCurrentBranch} setMenuMode={setMenuMode} branches={branches} userType={userType}/></div>
                 <div className="title-container">
                     <h1>TACARE MAPSHARE</h1>
                     <h2>Powered by the Jane Goodal Institute</h2>
