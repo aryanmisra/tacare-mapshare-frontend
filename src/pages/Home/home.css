@@ -186,6 +186,24 @@ html, body {
     background-color: var(--gray3);
     border-radius: 10px;
     padding-bottom: 20px;
+    transition: 0.5s cubic-bezier(.69,.09,.37,.94);
+    overflow: hidden;
+    transform-origin:280px 20px;
+}
+
+.species-card-toggle {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top:100px;
+    right:30px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--gray3);
+    border-radius: 40px;
+    transition: 0.2s cubic-bezier(.69,.09,.37,.94);
+    transition-delay: 0.7s;
 }
 
 .species-card-container img {

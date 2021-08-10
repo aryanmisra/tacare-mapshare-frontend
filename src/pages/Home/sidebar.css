@@ -1,0 +1,15 @@
+.sidebar-inner-container {
+    padding: 20px;
+}
+
+.sidebar-title-container {
+    color:white;
+}
+
+.sidebar-title-container h1 {
+    font-size: 30px;
+}
+
+.sidebar-title-container h2 {
+    font-size: 14px;
+}

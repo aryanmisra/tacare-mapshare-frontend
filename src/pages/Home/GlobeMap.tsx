@@ -66,17 +66,14 @@ export default class GlobeMap extends React.Component<any, globeState> {
 
     componentDidUpdate() {
       // if the view exists
-      if (this.state.view) {
+      if (this.state.view && !this.state.editorLoaded) {
         // load the editor widget
         loadModules(["esri/widgets/Editor"]).then(([Editor]) => {
           const editor = new Editor({
             view: this.state.view
           });
           // add widget to the view
-          if (!this.state.editorLoaded) {
             this.state.view.ui.add(editor, "top-right");
-            this.setState({editorLoaded:true})
-          }
         })
         // add a layer click listener 
         this.state.view.on("click", (event:any) => {
@@ -90,7 +87,14 @@ export default class GlobeMap extends React.Component<any, globeState> {
             }
           });
         });
+        this.setState({editorLoaded:true})
       }
+        if (this.props.mapEditMode && this.state.editorLoaded) {
+            console.log(document.getElementsByClassName("esri-ui-top-right")[0].style.display="auto")
+        }
+        else if (this.state.editorLoaded){
+            console.log(document.getElementsByClassName("esri-ui-top-right")[0].style.display="none")
+        }
     }
 
     render() {
@@ -117,7 +121,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
         this.setState({ map: map, view: view, status: "loaded" });
         setTimeout(() => {
             this.props.setLoaded(true)
-        }, 2500);
+        }, 0);
     }
 
     handleFail(e: any) {

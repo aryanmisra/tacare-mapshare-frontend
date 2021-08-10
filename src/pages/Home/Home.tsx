@@ -7,14 +7,20 @@ import * as globalVars from "../../globalVars";
 import GlobeMap from "./GlobeMap";
 import {BiMenu, BiGitBranch} from "react-icons/bi";
 import {HiOutlineDocumentDuplicate} from "react-icons/hi"
-import {AiFillGithub} from "react-icons/ai"
+import {AiFillGithub, AiOutlineCloseCircle, AiOutlineInfoCircle} from "react-icons/ai"
 import {FiMail} from "react-icons/fi"
+import SidebarMenu1 from "./sidebarMenu1";
+import SidebarMenu2 from "./sidebarMenu2";
+import SidebarMenu3 from "./sidebarMenu3";
 import "./home.css"
 
 export function Home(): React.ReactElement {
     const [loaded, setLoaded] = useState(false);
+    const [currentSpecies, setCurrentSpecies] = useState({name:"The West African Chimpanzee", image:"https://i.ibb.co/F5GDpBL/image-16.png", count:1532, description:"Nam non elementum odio. Phasellus consequat, felis sed pulvinar accumsan, nisl tellus convallis orci, quis gravida augue diam ac magna. Aliquam interdum ut nibh ut blandit. In congue justo et mi blandit condimentum. Donec odio est, semper nec condimentum sagittis."});
     const [menuMode, setMenuMode] = useState(-1);
     const [sidebarOpen, setSidebarOpen] = useState([-500, -500, -500]);
+    const [mapEditMode, setMapEditMode] = useState(false)
+    const [speciesCardOpen, setSpeciesCardOpen] = useState(true)
 
     useEffect(()=>{
         if (menuMode == -1) {
@@ -30,6 +36,7 @@ export function Home(): React.ReactElement {
             setSidebarOpen([-500, -500, 55])
         }
     },[menuMode])
+
     return (
         <>
             <div style={{pointerEvents:!loaded?'auto':'none', opacity:!loaded?1:0, transition: '0.5s cubic-bezier(.69,.09,.37,.94)'}} className="loading-container">
@@ -42,7 +49,7 @@ export function Home(): React.ReactElement {
             
             <div className="body-container">
                 <div className="globe-container">
-                    <GlobeMap setLoaded={setLoaded}/>
+                    <GlobeMap mapEditMode={mapEditMode} setLoaded={setLoaded}/>
                 </div>
                 <div className="navbar-container">
                     <div className="link-container">
@@ -56,25 +63,28 @@ export function Home(): React.ReactElement {
                         <FiMail color="white"  size={28} style={{marginTop:25, cursor:'pointer'}} onClick={()=> window.location.href = "mailto:eshchock1@gmail.com"}/>
                     </div>
                 </div>
-                <div id="sidebar-container1" className="sidebar-container" style={{marginLeft:sidebarOpen[0]}}></div>
-                <div id="sidebar-container2" className="sidebar-container" style={{marginLeft:sidebarOpen[1]}}></div>
-                <div id="sidebar-container3" className="sidebar-container" style={{marginLeft:sidebarOpen[2]}}></div>
+                <div id="sidebar-container1" className="sidebar-container" style={{marginLeft:sidebarOpen[0]}}><SidebarMenu1/></div>
+                <div id="sidebar-container2" className="sidebar-container" style={{marginLeft:sidebarOpen[1]}}><SidebarMenu2/></div>
+                <div id="sidebar-container3" className="sidebar-container" style={{marginLeft:sidebarOpen[2]}}><SidebarMenu3/></div>
                 <div className="title-container">
                     <h1>TACARE MAPSHARE</h1>
                     <h2>Powered by the Jane Goodal Institute</h2>
                 </div>
                 <div className="login-container">
-                    <button>LOGIN</button>
+                    <button onClick={()=>window.location.href="/login"}>LOGIN</button>
                 </div>
-                <div className="species-card-container">
-                    <img src="https://i.ibb.co/F5GDpBL/image-16.png"/>
-                    <Text color={globalVars.colors.white} mt="4" ml="4" mr="4" fontSize="18px">The West African Chimpanzee</Text>
-                    <Text color={globalVars.colors.white} mt="2" ml="4" mr="4" lineHeight="16px" fontSize="14px">Nam non elementum odio. Phasellus consequat, felis sed pulvinar accumsan, nisl tellus convallis orci, quis gravida augue diam ac magna. Aliquam interdum ut nibh ut blandit. In congue justo et mi blandit condimentum. Donec odio est, semper nec condimentum sagittis.</Text>
-                    <Text color={globalVars.colors.white} mt="2" ml="4" mr="4" lineHeight="16px" fontSize="14px">Current global count: 1532</Text>
+                <div className="species-card-toggle" style={{transform:speciesCardOpen?'scale(0)':'scale(1)'}}><AiOutlineInfoCircle size={22} color={"white"} onClick={()=>setSpeciesCardOpen(true)} style={{cursor:'pointer'}}/></div>
+                <div className="species-card-container" style={{transform:speciesCardOpen?'scale(1)':'scale(0)'}}>
+                    <img src={currentSpecies.image}/>
+                    <AiOutlineCloseCircle size={24} color={"white"} style={{position:'absolute', top:10, right:10, cursor:'pointer'}} onClick={()=>setSpeciesCardOpen(false)}/>
+                    <Text color={globalVars.colors.white} mt="4" ml="4" mr="4" fontSize="18px">{currentSpecies.name}</Text>
+                    <Text color={globalVars.colors.white} mt="2" ml="4" mr="4" lineHeight="16px" fontSize="14px">{currentSpecies.description}</Text>
+                    <Text color={globalVars.colors.white} mt="2" ml="4" mr="4" lineHeight="16px" fontSize="14px">Current global count: {currentSpecies.count}</Text>
                 </div>
+                {mapEditMode && 
                 <div className="modify-layer-container">
                     <button>Submit changes</button>
-                </div>
+                </div>}
             </div>
         </>
     );
