@@ -72,6 +72,36 @@ html, body {
     left:70px !important;
 }
 
+.loading-container {
+    padding: 0;
+    margin:0;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 1000;
+    background-color: #000000;
+    background-image: url("https://i.ibb.co/QXnLqpQ/download-3-1.jpg");
+    background-size: cover;
+}
+
+.loading-container .loading-text-container {
+    position: absolute;
+    top:30vh;
+    left:10vw;
+    color:white;
+}
+
+.loading-container h1 {
+    font-size: 72px;
+}
+
+.loading-container h2 {
+    font-size: 24px;
+    margin-top: -10px;
+}
+
 .body-container {
     position: absolute;
     top:0;

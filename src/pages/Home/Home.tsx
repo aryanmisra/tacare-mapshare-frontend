@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useRef, useState } from "react";
 
-import { Flex, Heading, Box, SimpleGrid, Button, Text} from "@chakra-ui/react";
+import { Flex, Heading, Box, SimpleGrid, Progress, Text} from "@chakra-ui/react";
 import { Scene } from "@esri/react-arcgis";
 import * as globalVars from "../../globalVars";
 import GlobeMap from "./GlobeMap";
@@ -32,7 +32,13 @@ export function Home(): React.ReactElement {
     },[menuMode])
     return (
         <>
-            {!loaded && <div style={{background:'red', width:'100%', height:'100%', position:'fixed', top:0, left:0, zIndex:1000}}></div>}
+            <div style={{pointerEvents:!loaded?'auto':'none', opacity:!loaded?1:0, transition: '0.5s cubic-bezier(.69,.09,.37,.94)'}} className="loading-container">
+                <div className="loading-text-container">
+                    <h1>TACARE MAPSHARE</h1>
+                    <h2>Powered by the Jane Goodal Institute</h2>
+                    <Progress size="xs" mt="4" isIndeterminate w="50%" bgColor={globalVars.colors.gray2} colorScheme="whiteAlpha" borderRadius="md"/>
+                </div>
+            </div>
             
             <div className="body-container">
                 <div className="globe-container">
