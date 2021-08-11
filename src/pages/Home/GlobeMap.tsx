@@ -276,9 +276,9 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
             // };
         });
 
-        return null;
     }, []);
-}
+        return null;
+    }
 export default class GlobeMap extends React.Component<any, globeState> {
     constructor (props: any) {
         super(props);
