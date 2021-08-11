@@ -50,76 +50,79 @@ export function useInterval(callback: () => void, delay: number | null) {
 }
 
 export const colors = {
-  white:"#FFFFFF",
-  green:"#55B259",
-  red:"#E47272",
-  gray1:"#4F535B",
-  gray2:"#303235",
-  gray3:"#202124",
-  blue1:"#8AB4F8",
-  blue2:"#5C88D0",
-}
+    white: "#FFFFFF",
+    green: "#55B259",
+    red: "#E47272",
+    gray1: "#4F535B",
+    gray2: "#303235",
+    gray3: "#202124",
+    blue1: "#8AB4F8",
+    blue2: "#5C88D0",
+};
 
 export const ChimpLayerWidgetConfig = {
-    "title": "Chimpanzee Reservation ID #{ID_NO}",
-    "spinnerEnabled":true,
-    "content": [{
-        "type": "fields",
-        "fieldInfos": [
-          {
-            "fieldName": "ASSESSMENT",
-            "label": "Assessment",
-            "isEditable": true,
-            "tooltip": "",
-            "visible": true,
-            "format": null,
-            "stringFieldOption": "text-box"
-          },
-          {
-            "fieldName": "BINOMIAL",
-            "label": "Binomial",
-            "isEditable": true,
-            "tooltip": "",
-            "visible": true,
-            "format": null,
-            "stringFieldOption": "text-box"
-          },
+    title: "Chimpanzee Reservation ID #{ID_NO}",
+    spinnerEnabled: true,
+    content: [
+        {
+            type: "fields",
+            fieldInfos: [
+                {
+                    fieldName: "ASSESSMENT",
+                    label: "Assessment",
+                    isEditable: true,
+                    tooltip: "",
+                    visible: true,
+                    format: null,
+                    stringFieldOption: "text-box",
+                },
+                {
+                    fieldName: "BINOMIAL",
+                    label: "Binomial",
+                    isEditable: true,
+                    tooltip: "",
+                    visible: true,
+                    format: null,
+                    stringFieldOption: "text-box",
+                },
 
-          {
-            "fieldName": "CITATION",
-            "label": "Citation",
-            "isEditable": true,
-            "tooltip": "",
-            "visible": true,
-            "format": null,
-            "stringFieldOption": "text-box"
-          },
-          {
-            "fieldName": "COMPILER",
-            "label": "Compiler",
-            "isEditable": true,
-            "tooltip": "",
-            "visible": true,
-            "format": null,
-            "stringFieldOption": "text-box"
-          },
-          {
-            "fieldName": "SUBSPECIES",
-            "label": "Subspecies",
-            "isEditable": true,
-            "tooltip": "",
-            "visible": true,
-            "format": null,
-            "stringFieldOption": "text-box"
-          },
-          {
-            "fieldName": "YEAR",
-            "label": "Year",
-            "isEditable": true,
-            "tooltip": "",
-            "visible": true,
-            "format": null,
-            "stringFieldOption": "text-box"
-          }
-        ]
-      }]}
+                {
+                    fieldName: "CITATION",
+                    label: "Citation",
+                    isEditable: true,
+                    tooltip: "",
+                    visible: true,
+                    format: null,
+                    stringFieldOption: "text-box",
+                },
+                {
+                    fieldName: "COMPILER",
+                    label: "Compiler",
+                    isEditable: true,
+                    tooltip: "",
+                    visible: true,
+                    format: null,
+                    stringFieldOption: "text-box",
+                },
+                {
+                    fieldName: "SUBSPECIES",
+                    label: "Subspecies",
+                    isEditable: true,
+                    tooltip: "",
+                    visible: true,
+                    format: null,
+                    stringFieldOption: "text-box",
+                },
+                {
+                    fieldName: "YEAR",
+                    label: "Year",
+                    isEditable: true,
+                    tooltip: "",
+                    visible: true,
+                    format: null,
+                    stringFieldOption: "text-box",
+                },
+            ],
+        },
+    ],
+};

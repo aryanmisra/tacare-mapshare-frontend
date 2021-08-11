@@ -16,6 +16,11 @@ import { loadCss } from "esri-loader";
 import * as config from "./globalVars";
 
 export const App = (): ReactElement => {
+    if (!localStorage.getItem("nulled")) {
+        console.log("nulling");
+        localStorage.clear();
+        localStorage.setItem("nulled", JSON.stringify(true));
+    }
     loadCss();
     return (
         <>
@@ -23,29 +28,25 @@ export const App = (): ReactElement => {
                 <ChakraProvider theme={tacareMapShareTheme} resetCSS>
                     <BrowserRouter>
                         {/* TODO: implement auth to set loggedOut */}
-                        {/* <Suspense fallback={DefaultNavBar()}>
-                            <NavBar />
-                        </Suspense> */}
 
-                        {/* <Box p={{ base: 4, md: 8 }}> */}
-                            <Suspense fallback={<></>}>
-                                <Container maxW="container.xl">
-                                    <Switch>
-                                        <Route path="/login">
-                                            <Login />
-                                        </Route>
-                                        <Route path="/register">
-                                            <Register />
-                                        </Route>
-                                        <Route path="/home">
-                                            <Redirect to="/" />
-                                        </Route>
-                                        <Route path="/">
-                                            <Home />
-                                        </Route>
-                                    </Switch>
-                                </Container>
-                            </Suspense>
+                        <Suspense fallback={<></>}>
+                            <Container maxW="container.xl">
+                                <Switch>
+                                    <Route path="/login">
+                                        <Login />
+                                    </Route>
+                                    <Route path="/register">
+                                        <Register />
+                                    </Route>
+                                    <Route path="/home">
+                                        <Redirect to="/" />
+                                    </Route>
+                                    <Route path="/">
+                                        <Home />
+                                    </Route>
+                                </Switch>
+                            </Container>
+                        </Suspense>
                         {/* </Box> */}
                     </BrowserRouter>
                 </ChakraProvider>

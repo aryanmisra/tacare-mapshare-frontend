@@ -11,16 +11,10 @@ export const verifyToken = async () => {
 };
 
 export const login = async (email: string, password: string) => {
-    return await client
-        .post("/auth/login", {
-            email: email,
-            password: password,
-        })
-        .then((response) => {
-            if (response.status === 200) {
-                saveData("token", response.data.token);
-            }
-        });
+    return await client.post("/auth/login", {
+        email: email,
+        password: password,
+    });
 };
 
 export const register = async (firstName: string, lastName: string, userType: string, email: string, password: string) => {

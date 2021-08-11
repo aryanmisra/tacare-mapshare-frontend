@@ -1,28 +1,11 @@
-export interface User {
+export default interface User {
     _id: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    password: string;
-    tier: number;
-    balance: {
-        bitclout: number;
-        ether: number;
-        in_transaction: boolean;
-    };
-    transactions: string[];
-    verification: {
-        email: boolean;
-        emailString: string;
-        personaAccountId: string | null;
-        inquiryId: string | null;
-        personaVerified: boolean;
-    };
-    bitclout: {
-        publicKey: string;
-        bio: string | undefined;
-        verified: boolean;
-        username: string | undefined;
-    };
+    profilePicture: string;
+    userType: string;
     created: Date;
-    admin: boolean;
+    password: string;
+    conservationGroups?: string[];
 }

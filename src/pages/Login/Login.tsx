@@ -2,10 +2,14 @@ import React, { ReactElement, useState } from "react";
 import { VStack, Text, Input, Flex, LinkOverlay, Link, HStack, InputGroup, InputRightElement, Button } from "@chakra-ui/react";
 import { HiExclamationCircle } from "react-icons/hi";
 import { BlueButton } from "../../components/BlueButton/BlueButton";
-import { login, register } from "../../services/auth";
+import { login } from "../../services/auth";
+import { userState } from "../../store";
+import { useRecoilState } from "recoil";
+import { saveData } from "../../helpers/persistence";
 import * as globalVars from "../../globalVars";
 
 export function Login(): ReactElement {
+    const [user, setUser] = useRecoilState(userState);
     const [loading, setLoading] = useState(false);
     const [emailErr, setEmailErr] = useState(false);
     const [passErr, setPassErr] = useState(false);
@@ -30,7 +34,10 @@ export function Login(): ReactElement {
         if (validate()) {
             setLoading(true);
             login(email, password)
-                .then(() => {
+                .then((response) => {
+                    saveData("token", response.data.token);
+                    saveData("user", response.data.user);
+                    setUser(response.data.user);
                     setLoading(false);
                     window.location.assign("/");
                 })

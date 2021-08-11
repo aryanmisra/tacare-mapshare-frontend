@@ -1,49 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Questrial&display=swap");
 
-html, body {
-    padding:0;
-    margin:0;
+html,
+body {
+    padding: 0;
+    margin: 0;
 }
 
 * {
-    font-family: 'Questrial', sans-serif;
+    font-family: "Questrial", sans-serif;
 }
 
 /* width */
 ::-webkit-scrollbar {
     width: 8px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
+}
+
+/* Track */
+::-webkit-scrollbar-track {
     background: rgb(54, 54, 54);
     border-radius: 8px;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 8px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
     background: #555;
-  }
+}
 
 :root {
-    --white:#FFFFFF;
-  --green:#55B259;
-  --red:#E47272;
-  --gray1:#4F535B;
-  --gray2:#2a2b2e;
-  --gray3:#202124;
-  --blue1:#8AB4F8;
-  --blue2:#5C88D0;
+    --white: #ffffff;
+    --green: #55b259;
+    --red: #e47272;
+    --gray1: #4f535b;
+    --gray2: #2a2b2e;
+    --gray3: #202124;
+    --blue1: #8ab4f8;
+    --blue2: #5c88d0;
 }
 
 /* esri override */
-.esri-view .esri-view-surface--inset-outline:focus::after {  
+.esri-view .esri-view-surface--inset-outline:focus::after {
     outline: none !important;
 }
 
@@ -52,20 +53,23 @@ html, body {
 }
 
 .esri-view .esri-ui-top-left {
-    top:auto;
-    left:auto;
-    bottom:-10px !important;
-    right:15px !important;
+    top: auto;
+    left: auto;
+    bottom: -10px !important;
+    right: 15px !important;
 }
 
 .esri-view .esri-ui-top-right {
-    top:auto;
-    left:auto;
-    bottom:60px !important;
-    right:75px !important;
+    top: auto;
+    left: auto;
+    bottom: 60px !important;
+    right: 75px !important;
 }
 
-.esri-view .esri-ui-top-right .esri-editor, .esri-widget--button, .esri-zoom, .esri-navigation-toggle {
+.esri-view .esri-ui-top-right .esri-editor,
+.esri-widget--button,
+.esri-zoom,
+.esri-navigation-toggle {
     border-radius: 5px !important;
 }
 
@@ -74,34 +78,43 @@ html, body {
     background-color: var(--gray2) !important;
 }
 
-.esri-popup__button:hover, .esri-popup__header-container--button:hover{
+.esri-popup__button:hover,
+.esri-popup__header-container--button:hover {
     background-color: var(--gray3) !important;
 }
 
-.esri-popup__main-container *, .esri-ui-top-left .esri-icon, .esri-navigation-toggle__button, .esri-compass, .esri-ui-top-right *{
-    color:var(--white) !important;
+.esri-popup__main-container *,
+.esri-ui-top-left .esri-icon,
+.esri-navigation-toggle__button,
+.esri-compass,
+.esri-ui-top-right * {
+    color: var(--white) !important;
 }
 
-.esri-feature__main-container, .esri-popup__navigation, .esri-popup__pointer-direction, .esri-ui-top-left *, .esri-ui-top-right *{
+.esri-feature__main-container,
+.esri-popup__navigation,
+.esri-popup__pointer-direction,
+.esri-ui-top-left *,
+.esri-ui-top-right * {
     background-color: var(--gray2) !important;
 }
 
 .esri-popup--is-docked-top-right {
     position: fixed !important;
-    top:auto !important;
-    right:auto !important;
-    bottom:0px !important;
-    left:70px !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: 0px !important;
+    left: 70px !important;
 }
 
 .loading-container {
     padding: 0;
-    margin:0;
+    margin: 0;
     width: 100vw;
     height: 100vh;
     position: fixed;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     z-index: 1000;
     background-color: #000000;
     background-image: url("https://i.ibb.co/QXnLqpQ/download-3-1.jpg");
@@ -110,9 +123,9 @@ html, body {
 
 .loading-container .loading-text-container {
     position: absolute;
-    top:30vh;
-    left:10vw;
-    color:white;
+    top: 30vh;
+    left: 10vw;
+    color: white;
 }
 
 .loading-container h1 {
@@ -126,8 +139,8 @@ html, body {
 
 .body-container {
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
 }
@@ -140,10 +153,10 @@ html, body {
 
 .navbar-container {
     position: fixed;
-    top:0;
-    left:0; 
+    top: 0;
+    left: 0;
     width: 55px;
-    background-color:var(--gray2);
+    background-color: var(--gray2);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -154,7 +167,7 @@ html, body {
 }
 
 .link-container {
-    width:50px;
+    width: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -162,21 +175,21 @@ html, body {
 
 .sidebar-container {
     position: fixed;
-    top:0;
-    transition: 0.7s cubic-bezier(.33,.59,.43,1);
+    top: 0;
+    transition: 0.7s cubic-bezier(0.33, 0.59, 0.43, 1);
     width: 425px;
-    background-color:var(--gray3);
+    background-color: var(--gray3);
     height: 100vh;
     z-index: 50;
-    -webkit-box-shadow: 12px 0px 19px -1px rgba(0,0,0,0.27); 
-    box-shadow: 12px 0px 19px -1px rgba(0,0,0,0.27);
+    -webkit-box-shadow: 12px 0px 19px -1px rgba(0, 0, 0, 0.27);
+    box-shadow: 12px 0px 19px -1px rgba(0, 0, 0, 0.27);
 }
 
 .title-container {
     position: fixed;
-    top:20px;
-    left:90px; 
-    color:white;
+    top: 20px;
+    left: 90px;
+    color: white;
 }
 
 .title-container h1 {
@@ -189,13 +202,13 @@ html, body {
 
 .login-container {
     position: fixed;
-    top:30px;
-    right:30px; 
+    top: 30px;
+    right: 30px;
 }
 
 .login-container button {
     background-color: var(--gray3);
-    padding:0 20px;
+    padding: 0 20px;
     height: 45px;
     border-radius: 5px;
     font-size: 18px;
@@ -204,15 +217,15 @@ html, body {
 
 .species-card-container {
     position: fixed;
-    top:100px;
-    right:30px;
+    top: 100px;
+    right: 30px;
     width: 300px;
     background-color: var(--gray3);
     border-radius: 10px;
     padding-bottom: 20px;
-    transition: 0.5s cubic-bezier(.69,.09,.37,.94);
+    transition: 0.5s cubic-bezier(0.69, 0.09, 0.37, 0.94);
     overflow: hidden;
-    transform-origin:280px 20px;
+    transform-origin: 280px 20px;
 }
 
 .species-card-toggle {
@@ -220,13 +233,13 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    top:100px;
-    right:30px;
+    top: 100px;
+    right: 30px;
     width: 40px;
     height: 40px;
     background-color: var(--gray3);
     border-radius: 40px;
-    transition: 0.15s cubic-bezier(.69,.09,.37,.94);
+    transition: 0.15s cubic-bezier(0.69, 0.09, 0.37, 0.94);
     transition-delay: 0.7s;
 }
 

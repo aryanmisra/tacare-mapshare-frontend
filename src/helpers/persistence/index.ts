@@ -29,6 +29,5 @@ export const setIdentityUsers = (users: IdentityUser) => {
 export const logout = () => {
     console.log("log out");
     removeData("user");
-    removeData("identityUsers");
     removeData("token");
 };
