@@ -15,13 +15,24 @@ interface globeState {
     editorLoaded: boolean;
 }
 
+function getDepth(arr:any[], depth:number) {
+    if (!arr[0]) {
+        return depth
+    }
+    else {
+        return getDepth(arr[0], depth + 1)
+    }
+}
 
 function processPolygon(arr:any[]) {
+    if (getDepth(arr, 0) == 3) {
+        return arr
+    }
     const temp = []
     for (let i =0;i<arr.length;i++) {
         temp.push(...arr[i])
     }
-    return temp
+    return processPolygon(temp)
 }
 
 let easternChimpanzeeLayer: any;
