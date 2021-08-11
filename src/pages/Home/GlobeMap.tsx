@@ -3,6 +3,7 @@ import { loadModules } from "esri-loader";
 import { Scene } from "@esri/react-arcgis";
 // import Feature from "esri/widgets/Feature";
 // import { resourceLimits } from "worker_threads";
+import { polygon1, polygon2, polygon3, polygon4 } from "./polygons";
 import * as globalVars from "../../globalVars"
 
 interface globeState {
@@ -20,49 +21,90 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
     const [layer, setLayer] = useState(null);
 
     useEffect(() => {
-        loadModules(["esri/Graphic", "esri/layers/GraphicsLayer"]).then(([Graphic, GraphicsLayer])=>{
+        loadModules(["esri/Graphic", "esri/layers/GraphicsLayer", "esri/geometry/Polygon"]).then(([Graphic, GraphicsLayer, Polygon])=>{
             const graphicsLayer = new GraphicsLayer();
             props.map.add(graphicsLayer);
-            graphics = []
-            // for (let i=0;i<3;i++){
-                const polygon = {
-                    type: "polygon",
-                    rings: [
-                        [-119.8984489994, 36.0137559967283], //Longitude, latitude
-                        [-119.806796597377, 34.0215816298725], //Longitude, latitude
-                        [-118.791432890735, 34.0163883241613], //Longitude, latitude
-                        [-118.79596686535, 34.008564864635],   //Longitude, latitude
-                        [-118.808558110679, 34.0035027131376]  //Longitude, latitude
-                    ]
-                 };
-                 const simpleFillSymbol = {
-                    type: "simple-fill",
-                    color: [0, 0, 0, 0.8],  // Orange, opacity 80%
-                    outline: {
-                        color: [255, 255, 255],
-                        width: 1
-                    }
-                 };
-                
-                //  const popupTemplate = {
-                //     title: "{Name}",
-                //     content: "{Description}"
-                //  }
                  const attributes = {
                     ASSESSMENT:"ASSESSMENT",
                     BINOMIAL:"BINOMIAL",
                     CITATION:"WWO",
                     COMPILER:"COMPILER",
-                    ID_NO:1, 
+                    ID_NO:Math.random(), 
                     SUBSPECIES:"western chimp", 
                     YEAR:"2019"
                  }
                 
-                 const polygonGraphic = new Graphic({
-                    geometry: polygon,                
-                    attributes: attributes,                
+                 const polygonGraphic1 = new Graphic({
+                    geometry: new Polygon(polygon1),                
+                    attributes: {
+                        ASSESSMENT:"ASSESSMENT",
+                        BINOMIAL:"BINOMIAL",
+                        CITATION:"WWO",
+                        COMPILER:"COMPILER",
+                        ID_NO:1, 
+                        SUBSPECIES:"western chimp", 
+                        YEAR:"2019"
+                     },                
                  });
-                 graphics = [polygonGraphic]
+                 const polygonGraphic2 = new Graphic({
+                    geometry: new Polygon([[
+                        [-117.8984489994, 36.0137559967283], //Longitude, latitude
+                        [-117.806796597377, 34.0215816298725], //Longitude, latitude
+                        [-116.791432890735, 34.0163883241613], //Longitude, latitude
+                        [-116.79596686535, 34.008564864635],   //Longitude, latitude
+                        [-116.808558110679, 34.0035027131376],
+                        [-117.8984489994, 36.0137559967283],  //Longitude, latitude
+                ].reverse(), [
+                    [-115.8984489994, 36.0137559967283], //Longitude, latitude
+                        [-115.806796597377, 34.0215816298725], //Longitude, latitude
+                        [-114.791432890735, 34.0163883241613], //Longitude, latitude
+                        [-114.79596686535, 34.008564864635],   //Longitude, latitude
+                        [-114.808558110679, 34.0035027131376],
+                        [-115.8984489994, 36.0137559967283]  //Longitude, latitude
+                ].reverse(),
+                [
+                    [-113.8984489994, 36.0137559967283], //Longitude, latitude
+                        [-113.806796597377, 34.0215816298725], //Longitude, latitude
+                        [-112.791432890735, 34.0163883241613], //Longitude, latitude
+                        [-112.79596686535, 34.008564864635],   //Longitude, latitude
+                        [-112.808558110679, 34.0035027131376],
+                        [-113.8984489994, 36.0137559967283],  //Longitude, latitude
+                ].reverse()]),                 
+                    attributes: {
+                        ASSESSMENT:"ASSESSMENT",
+                        BINOMIAL:"BINOMIAL",
+                        CITATION:"WWO",
+                        COMPILER:"COMPILER",
+                        ID_NO:2, 
+                        SUBSPECIES:"western chimp", 
+                        YEAR:"2019"
+                     },                
+                 });
+                 const polygonGraphic3 = new Graphic({
+                    geometry: polygon3,                
+                    attributes: {
+                        ASSESSMENT:"ASSESSMENT",
+                        BINOMIAL:"BINOMIAL",
+                        CITATION:"WWO",
+                        COMPILER:"COMPILER",
+                        ID_NO:3, 
+                        SUBSPECIES:"western chimp", 
+                        YEAR:"2019"
+                     },              
+                 });
+                 const polygonGraphic4 = new Graphic({
+                    geometry: polygon4,                
+                    attributes: {
+                        ASSESSMENT:"ASSESSMENT",
+                        BINOMIAL:"BINOMIAL",
+                        CITATION:"WWO",
+                        COMPILER:"COMPILER",
+                        ID_NO:4, 
+                        SUBSPECIES:"western chimp", 
+                        YEAR:"2019"
+                     },                
+                 });
+                 graphics = [polygonGraphic1, polygonGraphic2, ]
         }).then(()=>{
             const fields = [
                 {
@@ -134,8 +176,10 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                     
                 });
                 setLayer(easternChimpanzeeLayer);
+                easternChimpanzeeLayer.queryFeatures().then(function(result:any){
+                    // console.log(result.features);  
+                  });
                 if (!layer) {
-                    console.log(props.map)
                     props.map.add(easternChimpanzeeLayer);
                 }
             })
