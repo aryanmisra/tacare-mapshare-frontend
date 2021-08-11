@@ -15,6 +15,15 @@ interface globeState {
     editorLoaded: boolean;
 }
 
+
+function processPolygon(arr:any[]) {
+    const temp = []
+    for (let i =0;i<arr.length;i++) {
+        temp.push(...arr[i])
+    }
+    return temp
+}
+
 let easternChimpanzeeLayer: any;
 let graphics: any = [];
 const fields = [
@@ -69,7 +78,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
             }
 
             const polygonGraphic1 = new Graphic({
-                geometry: new Polygon(polygon1),
+                geometry: new Polygon(processPolygon(polygon1)),
                 attributes: {
                     ASSESSMENT: "ASSESSMENT",
                     BINOMIAL: "BINOMIAL",
@@ -81,29 +90,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                 },
             });
             const polygonGraphic2 = new Graphic({
-                geometry: new Polygon([[
-                    [-117.8984489994, 36.0137559967283], //Longitude, latitude
-                    [-117.806796597377, 34.0215816298725], //Longitude, latitude
-                    [-116.791432890735, 34.0163883241613], //Longitude, latitude
-                    [-116.79596686535, 34.008564864635],   //Longitude, latitude
-                    [-116.808558110679, 34.0035027131376],
-                    [-117.8984489994, 36.0137559967283],  //Longitude, latitude
-                ].reverse(), [
-                    [-115.8984489994, 36.0137559967283], //Longitude, latitude
-                    [-115.806796597377, 34.0215816298725], //Longitude, latitude
-                    [-114.791432890735, 34.0163883241613], //Longitude, latitude
-                    [-114.79596686535, 34.008564864635],   //Longitude, latitude
-                    [-114.808558110679, 34.0035027131376],
-                    [-115.8984489994, 36.0137559967283]  //Longitude, latitude
-                ].reverse(),
-                [
-                    [-113.8984489994, 36.0137559967283], //Longitude, latitude
-                    [-113.806796597377, 34.0215816298725], //Longitude, latitude
-                    [-112.791432890735, 34.0163883241613], //Longitude, latitude
-                    [-112.79596686535, 34.008564864635],   //Longitude, latitude
-                    [-112.808558110679, 34.0035027131376],
-                    [-113.8984489994, 36.0137559967283],  //Longitude, latitude
-                ].reverse()]),
+                geometry: new Polygon(processPolygon(polygon2)),
                 attributes: {
                     ASSESSMENT: "ASSESSMENT",
                     BINOMIAL: "BINOMIAL",
@@ -115,7 +102,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                 },
             });
             const polygonGraphic3 = new Graphic({
-                geometry: polygon3,
+                geometry: new Polygon(processPolygon(polygon3)),
                 attributes: {
                     ASSESSMENT: "ASSESSMENT",
                     BINOMIAL: "BINOMIAL",
@@ -127,7 +114,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                 },
             });
             const polygonGraphic4 = new Graphic({
-                geometry: polygon4,
+                geometry: new Polygon(processPolygon(polygon4)),
                 attributes: {
                     ASSESSMENT: "ASSESSMENT",
                     BINOMIAL: "BINOMIAL",
@@ -138,7 +125,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                     YEAR: "2019"
                 },
             });
-            graphics = [polygonGraphic1, polygonGraphic2,]
+            graphics = [polygonGraphic1, polygonGraphic2, polygonGraphic3, polygonGraphic4]
         }).then(() => {
 
             loadModules(["esri/layers/FeatureLayer"])
@@ -160,7 +147,34 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                                 }
                             }
                         },
-                        spatialReference: {wkid: 4326},
+                        useStandardizedQueries : true, 
+                        geometryType : "polygon", 
+                        minScale : 0, 
+                        maxScale : 0, 
+                        extent : {
+                            xmin : -1731734.5940793492, 
+                            ymin : -935049.44157227, 
+                            xmax : 4205486.5859548226, 
+                            ymax : 4202463.7441516332, 
+                            spatialReference : {
+                                wkid : 102100, 
+                                latestWkid : 3857
+                            }
+                        }, 
+                        allowGeometryUpdates : true, 
+                        hasAttachments : false, 
+                        // "htmlPopupType" : "esriServerHTMLPopupTypeNone", 
+                        hasStaticData : false,
+                        // "capabilities" : "Create,Delete,Query,Update,Editing,ChangeTracking",
+                        hasM : false, 
+                        hasZ : false, 
+                        "hasGeometryProperties" : true, 
+                        "geometryProperties" : 
+                        {
+                            "shapeAreaFieldName" : "Shape__Area", 
+                            "shapeLengthFieldName" : "Shape__Length", 
+                            "units" : "esriMeters"
+                        }, 
                         labelingInfo: [
                             {
                                 labelExpressionInfo: {expression: "$feature.ID_NO"},
@@ -172,7 +186,6 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                                 },
                             },
                         ],
-                        geometryType: "polygon",
                         // url: props.featureLayerProperties.url,
                         popupTemplate: globalVars.ChimpLayerWidgetConfig,
                         outFields: ["ASSESSMENT", "BINOMIAL", "CITATION", "COMPILER", "ID_NO", "SUBSPECIES", "YEAR",],
@@ -181,15 +194,12 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                     });
                     setLayer(easternChimpanzeeLayer);
                     easternChimpanzeeLayer.queryFeatures().then(function (result: any) {
-                        // console.log(result.features);  
+                        console.log(result.features);  
                     });
                     if (!layer) {
                         props.map.add(easternChimpanzeeLayer);
                     }
                 })
-            // return function cleanup() {
-            //     props.map.remove(layer);
-            // };
         });
 
     }, []);
