@@ -91,11 +91,7 @@ export const ChimpLayerWidgetConfig = {
             "isEditable": true,
             "tooltip": "",
             "visible": true,
-            "format": {
-              "places": 2,
-              "digitSeparator": true
-            },
-
+            "format": null,
             "stringFieldOption": "text-box"
           },
           {
@@ -104,11 +100,7 @@ export const ChimpLayerWidgetConfig = {
             "isEditable": true,
             "tooltip": "",
             "visible": true,
-            "format": {
-              "places": 2,
-              "digitSeparator": true
-            },
-
+            "format": null,
             "stringFieldOption": "text-box"
           },
           {
@@ -117,11 +109,7 @@ export const ChimpLayerWidgetConfig = {
             "isEditable": true,
             "tooltip": "",
             "visible": true,
-            "format": {
-              "places": 2,
-              "digitSeparator": true
-            },
-
+            "format": null,
             "stringFieldOption": "text-box"
           },
           {
@@ -130,11 +118,7 @@ export const ChimpLayerWidgetConfig = {
             "isEditable": true,
             "tooltip": "",
             "visible": true,
-            "format": {
-              "places": 2,
-              "digitSeparator": true
-            },
-
+            "format": null,
             "stringFieldOption": "text-box"
           }
         ]

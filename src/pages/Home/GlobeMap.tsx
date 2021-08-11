@@ -13,40 +13,139 @@ interface globeState {
 }
 
 let easternChimpanzeeLayer:any;
+let graphics:any = [];
+
 
 const EastChimpanzeeFeatureLayer = (props: any) => {
     const [layer, setLayer] = useState(null);
 
     useEffect(() => {
-        loadModules(["esri/layers/FeatureLayer"])
+        loadModules(["esri/Graphic", "esri/layers/GraphicsLayer"]).then(([Graphic, GraphicsLayer])=>{
+            const graphicsLayer = new GraphicsLayer();
+            props.map.add(graphicsLayer);
+            graphics = []
+            // for (let i=0;i<3;i++){
+                const polygon = {
+                    type: "polygon",
+                    rings: [
+                        [-119.8984489994, 36.0137559967283], //Longitude, latitude
+                        [-119.806796597377, 34.0215816298725], //Longitude, latitude
+                        [-118.791432890735, 34.0163883241613], //Longitude, latitude
+                        [-118.79596686535, 34.008564864635],   //Longitude, latitude
+                        [-118.808558110679, 34.0035027131376]  //Longitude, latitude
+                    ]
+                 };
+                 const simpleFillSymbol = {
+                    type: "simple-fill",
+                    color: [0, 0, 0, 0.8],  // Orange, opacity 80%
+                    outline: {
+                        color: [255, 255, 255],
+                        width: 1
+                    }
+                 };
+                
+                //  const popupTemplate = {
+                //     title: "{Name}",
+                //     content: "{Description}"
+                //  }
+                 const attributes = {
+                    ASSESSMENT:"ASSESSMENT",
+                    BINOMIAL:"BINOMIAL",
+                    CITATION:"WWO",
+                    COMPILER:"COMPILER",
+                    ID_NO:1, 
+                    SUBSPECIES:"western chimp", 
+                    YEAR:"2019"
+                 }
+                
+                 const polygonGraphic = new Graphic({
+                    geometry: polygon,                
+                    attributes: attributes,                
+                 });
+                 graphics = [polygonGraphic]
+        }).then(()=>{
+            const fields = [
+                {
+                  name: "ASSESSMENT",
+                  alias: "ASSESSMENT",
+                  type: "string"
+                }, {
+                  name: "BINOMIAL",
+                  alias: "BINOMIAL",
+                  type: "string"
+                },
+                {
+                    name: "CITATION",
+                    alias: "CITATION",
+                    type: "string"
+                  }, {
+                    name: "COMPILER",
+                    alias: "COMPILER",
+                    type: "string"
+                  },
+                  {
+                    name: "ID_NO",
+                    alias: "ID_NO",
+                    type: "oid"
+                  }, {
+                    name: "SUBSPECIES",
+                    alias: "SUBSPECIES",
+                    type: "string"
+                  },
+                  {
+                    name: "YEAR",
+                    alias: "YEAR",
+                    type: "integer"
+                  }];
+            loadModules(["esri/layers/FeatureLayer"])
             .then(([FeatureLayer]) => {
                 easternChimpanzeeLayer = new FeatureLayer({
-                    url: props.featureLayerProperties.url,
-                    popupTemplate: globalVars.ChimpLayerWidgetConfig,
-                    outFields: ["ASSESSMENT","BINOMIAL","CITATION","COMPILER","ID_NO", "SUBSPECIES", "YEAR",],
-                    title: "Monkeys",
-                    editingEnabled: true,
+                    supportsEditing: true,
+                    supportsAdd: true,
+                    source: graphics,
+                    fields: fields, 
+                    objectIdField: "ID_NO", 
+                    renderer: {
+                        type:"simple",
+                        symbol:{
+                            type:"simple-fill",
+                            color:[76,129,205,191], 
+                            outline: {
+                                color: [0,0,0,255],
+                                width: 0.75
+                            }}},
+                    spatialReference: {wkid: 4326},
                     labelingInfo: [
                         {
                             labelExpressionInfo: { expression: "$feature.ID_NO" },
                             symbol: {
                                 type: "text",
                                 color: "black",
-                                haloSize: 1,
+                                haloSize: 0.7,
                                 haloColor: "white",
                             },
                         },
                     ],
+                    geometryType: "polygon",
+                    // url: props.featureLayerProperties.url,
+                    popupTemplate: globalVars.ChimpLayerWidgetConfig,
+                    outFields: ["ASSESSMENT","BINOMIAL","CITATION","COMPILER","ID_NO", "SUBSPECIES", "YEAR",],
+                    title: "Chimpanzee",
+                    
                 });
                 setLayer(easternChimpanzeeLayer);
-                props.map.add(easternChimpanzeeLayer);
+                if (!layer) {
+                    console.log(props.map)
+                    props.map.add(easternChimpanzeeLayer);
+                }
             })
             .catch((err) => console.error(err));
+        })
 
-        return function cleanup() {
-            props.map.remove(layer);
-        };
-    }, [props]);
+        // return function cleanup() {
+        //     props.map.remove(layer);
+        // };
+    }, []);
 
     return null;
 };

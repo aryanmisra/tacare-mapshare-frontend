@@ -28,7 +28,7 @@ export function Home(): React.ReactElement {
     // const { user, userIsLoading, userIsError } = useUser(token);
     const [currentBranch, setCurrentBranch] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState([-500, -500, -500, -500]);
-    const [mapEditMode, setMapEditMode] = useState(false)
+    const [mapEditMode, setMapEditMode] = useState(true)
     const [speciesCardOpen, setSpeciesCardOpen] = useState(true)
 
     useEffect(()=>{
