@@ -3,8 +3,6 @@ import {loadModules} from "esri-loader";
 import {Scene} from "@esri/react-arcgis";
 import {conservationState} from "../../store";
 import {useRecoilValue} from "recoil";
-// import Feature from "esri/widgets/Feature";
-// import { resourceLimits } from "worker_threads";
 import {polygon1, polygon2, polygon3, polygon4} from "./polygons";
 import * as globalVars from "../../globalVars"
 
@@ -161,10 +159,10 @@ export default class GlobeMap extends React.Component<any, globeState> {
                             type: "simple",
                             symbol: {
                                 type: "simple-fill",
-                                color: [76, 129, 205, 191],
+                                color: [216, 113, 90, 100],
                                 outline: {
-                                    color: [0, 0, 0, 255],
-                                    width: 0.75
+                                    color: [123, 52, 36, 255],
+                                    width: 1
                                 }
                             }
                         },
@@ -199,9 +197,9 @@ export default class GlobeMap extends React.Component<any, globeState> {
                                 labelExpressionInfo: {expression: "$feature.POPULATION"},
                                 symbol: {
                                     type: "text",
-                                    color: "black",
-                                    haloSize: 0.7,
-                                    haloColor: "white",
+                                    color: [103, 35, 20, 255],
+                                    haloSize: 0.4,
+                                    haloColor: [245, 217, 211, 255],
                                 },
                             },
                         ],
@@ -215,7 +213,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
                     }
                     this.setState({layer:easternChimpanzeeLayer});
                     setTimeout(() => {
-                        this.switchLayers([graphics[0], graphics[1]])
+                        this.switchLayers(graphics)
                     }, 2000);
                 })
         });
@@ -232,18 +230,6 @@ export default class GlobeMap extends React.Component<any, globeState> {
                 });
                 // add widget to the view
                 this.state.view.ui.add(editor, "top-right");
-            });
-            // add a layer click listener
-            this.state.view.on("click", (event: any) => {
-                const opts = {
-                    include: easternChimpanzeeLayer,
-                };
-                this.state.view.hitTest(event, opts).then(function (response: any) {
-                    if (response.results.length) {
-                        // attributes of a clicked layer can be accessed here
-                        // console.log(response.results[0].graphic.attributes);
-                    }
-                });
             });
             this.setState({editorLoaded: true});
         }
