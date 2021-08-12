@@ -7,7 +7,9 @@ import { userState } from "../../store";
 import { useRecoilState } from "recoil";
 import { saveData } from "../../helpers/persistence";
 import * as globalVars from "../../globalVars";
+import { BiArrowBack } from "react-icons/bi";
 
+import "./login.css"
 export function Login(): ReactElement {
     const [user, setUser] = useRecoilState(userState);
     const [loading, setLoading] = useState(false);
@@ -57,9 +59,10 @@ export function Login(): ReactElement {
     };
 
     const loginView = (
-        <VStack spacing={6} align="flex-start" maxW="450px">
+        <VStack spacing={6} align="flex-start" maxW="450px" minW="350px">
             <Text fontSize="xx-large" fontWeight="bold">
-                Login to Tacare MapShare
+            <BiArrowBack size={40} color="white" style={{ display: "inline", marginTop: -4, cursor:'pointer'}} onClick={() => window.location.assign("/")} />
+                &nbsp;Login to Tacare Mapshare
             </Text>
             <Text fontSize="md" fontWeight="bold">
                 Email Address
@@ -89,7 +92,7 @@ export function Login(): ReactElement {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <InputRightElement width="4.5rem">
-                            <Button h="1.75rem" size="sm" onClick={handleClick}>
+                            <Button h="1.75rem" size="sm" onClick={handleClick} _hover={{backgroundColor:globalVars.colors.gray1}}>
                                 {show ? "Hide" : "Show"}
                             </Button>
                         </InputRightElement>
@@ -106,7 +109,7 @@ export function Login(): ReactElement {
                 {errText}
             </Text>
             <BlueButton text={`   Login  `} onClick={loginHandler} w="full" loading={loading} />
-            <Button w="full" onClick={() => window.location.assign("/register")}>
+            <Button w="full" _hover={{backgroundColor:globalVars.colors.gray2}} onClick={() => window.location.assign("/register")}>
                 Register
             </Button>
         </VStack>

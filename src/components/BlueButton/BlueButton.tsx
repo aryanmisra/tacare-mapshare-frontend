@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, ButtonProps, Text } from "@chakra-ui/react";
-
+import * as globalVars from "../../globalVars"
 import { HiArrowRight } from "react-icons/hi";
 
 interface BlueButtonProps extends ButtonProps {
@@ -17,13 +17,13 @@ export const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, width, loadi
         <Button
             isLoading={loading}
             boxShadow={"md"}
-            bg={ghost ? "brandSubtle.100" : "brand.100"}
+            bg={ghost ? "brandSubtle.100" : globalVars.colors.blue2}
             isDisabled={disabled}
             _hover={{
-                bg: `${ghost ? "brandSubtle.150" : "brand.150"}`,
+                bg: `${ghost ? "brandSubtle.150" : globalVars.colors.blue1}`,
             }}
             _active={{
-                bg: `${ghost ? "brandSubtle.200" : "brand.200"}`,
+                bg: `${ghost ? "brandSubtle.200" : globalVars.colors.blue1}`,
             }}
             width={width ? width : ""}
             color={ghost ? "black" : "white"}

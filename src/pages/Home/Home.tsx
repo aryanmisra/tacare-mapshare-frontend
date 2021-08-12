@@ -75,13 +75,13 @@ export function Home(): React.ReactElement {
     // ]
     return (
         <>
-            {/* <div style={{pointerEvents:!loaded?'auto':'none', opacity:!loaded?1:0, transition: '0.5s cubic-bezier(.69,.09,.37,.94)'}} className="loading-container">
+            <div style={{pointerEvents:!loaded?'auto':'none', opacity:!loaded?1:0, transition: '0.5s cubic-bezier(.69,.09,.37,.94)'}} className="loading-container">
                 <div className="loading-text-container">
                     <h1>TACARE MAPSHARE</h1>
                     <h2>Powered by the Jane Goodal Institute</h2>
                     <Progress size="xs" mt="4" isIndeterminate w="50%" bgColor={globalVars.colors.gray2} colorScheme="whiteAlpha" borderRadius="md" />
                 </div>
-            </div> */}
+            </div>
 
             <div className="body-container">
                 <div className="globe-container">

@@ -4,6 +4,9 @@ import { BlueButton } from "../../components/BlueButton";
 import { HiExclamationCircle } from "react-icons/hi";
 import { register } from "../../services/auth";
 import * as globalVars from "../../globalVars";
+import { BiArrowBack } from "react-icons/bi";
+
+import "./register.css"
 export function Register(): ReactElement {
     const [loading, setLoading] = useState(false);
     const [emailErr, setEmailErr] = useState(false);
@@ -54,9 +57,10 @@ export function Register(): ReactElement {
         }
     };
     const newUserView = (
-        <VStack spacing={5} align="flex-start" maxW="400px">
+        <VStack spacing={5} align="flex-start" maxW="400px" mt="12">
             <Text fontSize="xx-large" fontWeight="bold">
-                New Account
+            <BiArrowBack size={40} color="white" style={{ display: "inline", marginTop: -4, cursor:'pointer'}} onClick={() => window.location.assign("/")} />
+                &nbsp;Create an Account
             </Text>
 
             <Text fontSize="md" color="gray.600">
@@ -90,8 +94,8 @@ export function Register(): ReactElement {
                 User Type
             </Text>
             <Select placeholder="" value={userType} onChange={(e) => setUserType(e.target.value)}>
-                <option value="user">Stakeholder/Expert</option>
-                <option value="admin">GIS User/Admin</option>
+                <option style={{backgroundColor:globalVars.colors.gray1}} value="user">Stakeholder/Expert</option>
+                <option style={{backgroundColor:globalVars.colors.gray1}} value="admin">GIS User/Admin</option>
             </Select>
 
             <Text fontSize="md" fontWeight="bold">
@@ -108,7 +112,7 @@ export function Register(): ReactElement {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <InputRightElement width="4.5rem">
-                            <Button h="1.75rem" size="sm" onClick={handleClick}>
+                            <Button h="1.75rem" size="sm" onClick={handleClick} _hover={{backgroundColor:globalVars.colors.gray1}}>
                                 {show ? "Hide" : "Show"}
                             </Button>
                         </InputRightElement>
@@ -128,6 +132,9 @@ export function Register(): ReactElement {
             <Flex w="full" justify="center">
                 <BlueButton text={`   Register   `} width="full" onClick={registerHandler} loading={loading} />
             </Flex>
+            <Button w="full" _hover={{backgroundColor:globalVars.colors.gray2}} onClick={() => window.location.assign("/login")}>
+                Login
+            </Button>
         </VStack>
     );
 
