@@ -68,14 +68,24 @@ export const ChimpLayerWidgetConfig = {
             type: "fields",
             fieldInfos: [
                 {
-                    fieldName: "ASSESSMENT",
-                    label: "Assessment",
+                    fieldName: "POPULATION",
+                    label: "Population",
                     isEditable: true,
                     tooltip: "",
                     visible: true,
                     format: null,
                     stringFieldOption: "text-box",
                 },
+                {
+                    fieldName: "SUBSPECIES",
+                    label: "Subspecies",
+                    isEditable: true,
+                    tooltip: "",
+                    visible: true,
+                    format: null,
+                    stringFieldOption: "text-box",
+                },
+
                 {
                     fieldName: "BINOMIAL",
                     label: "Binomial",
@@ -85,7 +95,6 @@ export const ChimpLayerWidgetConfig = {
                     format: null,
                     stringFieldOption: "text-box",
                 },
-
                 {
                     fieldName: "CITATION",
                     label: "Citation",
@@ -98,15 +107,6 @@ export const ChimpLayerWidgetConfig = {
                 {
                     fieldName: "COMPILER",
                     label: "Compiler",
-                    isEditable: true,
-                    tooltip: "",
-                    visible: true,
-                    format: null,
-                    stringFieldOption: "text-box",
-                },
-                {
-                    fieldName: "SUBSPECIES",
-                    label: "Subspecies",
                     isEditable: true,
                     tooltip: "",
                     visible: true,

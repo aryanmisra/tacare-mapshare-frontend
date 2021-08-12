@@ -15,7 +15,7 @@ interface globeState {
     editorLoaded: boolean;
 }
 
-function getDepth(arr:any[], depth:number) {
+function getDepth(arr:any[], depth:number):any {
     if (!arr[0]) {
         return depth
     }
@@ -24,7 +24,7 @@ function getDepth(arr:any[], depth:number) {
     }
 }
 
-function processPolygon(arr:any[]) {
+function processPolygon(arr:any[]):any {
     if (getDepth(arr, 0) == 3) {
         return arr
     }
@@ -39,30 +39,28 @@ let easternChimpanzeeLayer: any;
 let graphics: any = [];
 const fields = [
     {
-        name: "ASSESSMENT",
-        alias: "ASSESSMENT",
+        name: "ID_NO",
+        alias: "ID_NO",
+        type: "oid"
+    }, {
+        name: "POPULATION",
+        alias: "POPULATION",
         type: "string"
     }, {
+        name: "SUBSPECIES",
+        alias: "SUBSPECIES",
+        type: "string"
+    },{
         name: "BINOMIAL",
         alias: "BINOMIAL",
         type: "string"
-    },
-    {
+    },{
         name: "CITATION",
         alias: "CITATION",
         type: "string"
     }, {
         name: "COMPILER",
         alias: "COMPILER",
-        type: "string"
-    },
-    {
-        name: "ID_NO",
-        alias: "ID_NO",
-        type: "oid"
-    }, {
-        name: "SUBSPECIES",
-        alias: "SUBSPECIES",
         type: "string"
     },
     {
@@ -78,62 +76,52 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
         loadModules(["esri/Graphic", "esri/layers/GraphicsLayer", "esri/geometry/Polygon"]).then(([Graphic, GraphicsLayer, Polygon]) => {
             const graphicsLayer = new GraphicsLayer();
             props.map.add(graphicsLayer);
-            const attributes = {
-                ASSESSMENT: "ASSESSMENT",
-                BINOMIAL: "BINOMIAL",
-                CITATION: "WWO",
-                COMPILER: "COMPILER",
-                ID_NO: Math.random(),
-                SUBSPECIES: "western chimp",
-                YEAR: "2019"
-            }
-
             const polygonGraphic1 = new Graphic({
                 geometry: new Polygon(processPolygon(polygon1)),
                 attributes: {
-                    ASSESSMENT: "ASSESSMENT",
-                    BINOMIAL: "BINOMIAL",
-                    CITATION: "WWO",
-                    COMPILER: "COMPILER",
-                    ID_NO: 1,
-                    SUBSPECIES: "western chimp",
-                    YEAR: "2019"
+                    ID_NO: "15933",
+                    POPULATION: 12000,
+                    SUBSPECIES: "ellioti",
+                    BINOMIAL: "Pan troglodytes",
+                    CITATION: "IUCN (International Union for Conservation of Nature)",
+                    COMPILER: "IUCN SSC A.P.E.S. Database",
+                    YEAR: "2018"
                 },
             });
             const polygonGraphic2 = new Graphic({
                 geometry: new Polygon(processPolygon(polygon2)),
                 attributes: {
-                    ASSESSMENT: "ASSESSMENT",
-                    BINOMIAL: "BINOMIAL",
-                    CITATION: "WWO",
-                    COMPILER: "COMPILER",
-                    ID_NO: 2,
-                    SUBSPECIES: "western chimp",
-                    YEAR: "2019"
+                    ID_NO: "12943",
+                    POPULATION: 2400,
+                    SUBSPECIES: "troglodytes",
+                    BINOMIAL: "Pan troglodytes",
+                    CITATION: "IUCN (International Union for Conservation of Nature)",
+                    COMPILER: "UNEP-WCMC, Lilian Pintea, Jane Goodall Institute",
+                    YEAR: "2018"
                 },
             });
             const polygonGraphic3 = new Graphic({
                 geometry: new Polygon(processPolygon(polygon3)),
                 attributes: {
-                    ASSESSMENT: "ASSESSMENT",
-                    BINOMIAL: "BINOMIAL",
-                    CITATION: "WWO",
-                    COMPILER: "COMPILER",
-                    ID_NO: 3,
-                    SUBSPECIES: "western chimp",
-                    YEAR: "2019"
+                    ID_NO: "95441",
+                    POPULATION: 105,
+                    SUBSPECIES: "schweinfurthii",
+                    BINOMIAL: "Pan troglodytes",
+                    CITATION: "IUCN (International Union for Conservation of Nature)",
+                    COMPILER: "Lilian Pintea, Jane Goodall Institute, IUCN SSC A.P.E.S. Database",
+                    YEAR: "2018"
                 },
             });
             const polygonGraphic4 = new Graphic({
                 geometry: new Polygon(processPolygon(polygon4)),
                 attributes: {
-                    ASSESSMENT: "ASSESSMENT",
-                    BINOMIAL: "BINOMIAL",
-                    CITATION: "WWO",
-                    COMPILER: "COMPILER",
-                    ID_NO: 4,
-                    SUBSPECIES: "western chimp",
-                    YEAR: "2019"
+                    ID_NO: "61445",
+                    POPULATION: 10000,
+                    SUBSPECIES: "verus",
+                    BINOMIAL: "Pan troglodytes",
+                    CITATION: "IUCN (International Union for Conservation of Nature)",
+                    COMPILER: "IUCN SSC A.P.E.S. Database",
+                    YEAR: "2018"
                 },
             });
             graphics = [polygonGraphic1, polygonGraphic2, polygonGraphic3, polygonGraphic4]
@@ -174,21 +162,19 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                         }, 
                         allowGeometryUpdates : true, 
                         hasAttachments : false, 
-                        // "htmlPopupType" : "esriServerHTMLPopupTypeNone", 
                         hasStaticData : false,
-                        // "capabilities" : "Create,Delete,Query,Update,Editing,ChangeTracking",
                         hasM : false, 
                         hasZ : false, 
-                        "hasGeometryProperties" : true, 
-                        "geometryProperties" : 
+                        hasGeometryProperties : true, 
+                        geometryProperties : 
                         {
-                            "shapeAreaFieldName" : "Shape__Area", 
-                            "shapeLengthFieldName" : "Shape__Length", 
-                            "units" : "esriMeters"
+                            shapeAreaFieldName : "Shape__Area", 
+                            shapeLengthFieldName : "Shape__Length", 
+                            units : "esriMeters"
                         }, 
                         labelingInfo: [
                             {
-                                labelExpressionInfo: {expression: "$feature.ID_NO"},
+                                labelExpressionInfo: {expression: "$feature.POPULATION"},
                                 symbol: {
                                     type: "text",
                                     color: "black",
@@ -197,9 +183,8 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                                 },
                             },
                         ],
-                        // url: props.featureLayerProperties.url,
                         popupTemplate: globalVars.ChimpLayerWidgetConfig,
-                        outFields: ["ASSESSMENT", "BINOMIAL", "CITATION", "COMPILER", "ID_NO", "SUBSPECIES", "YEAR",],
+                        outFields: ["POPULATION", "BINOMIAL", "CITATION", "COMPILER", "ID_NO", "SUBSPECIES", "YEAR",],
                         title: "Chimpanzee",
 
                     });
@@ -216,6 +201,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
     }, []);
         return null;
     }
+
 export default class GlobeMap extends React.Component<any, globeState> {
     constructor (props: any) {
         super(props);
