@@ -13,6 +13,7 @@ interface globeState {
     map: any | null;
     view: any | null;
     editorLoaded: boolean;
+    layer:any;
 }
 
 function getDepth(arr:any[], depth:number):any {
@@ -68,18 +69,39 @@ const fields = [
         alias: "YEAR",
         type: "integer"
     }];
-const EastChimpanzeeFeatureLayer = (props: any) => {
-    const [layer, setLayer] = useState(null);
-    const conservation = useRecoilValue(conservationState);
 
-    useEffect(() => {
+
+export default class GlobeMap extends React.Component<any, globeState> {
+    constructor (props: any) {
+        super(props);
+        this.state = {
+            status: "loading",
+            map: null,
+            view: null,
+            editorLoaded: false,
+            layer:null,
+        };
+        this.handleMapLoad = this.handleMapLoad.bind(this);
+        this.handleFail = this.handleFail.bind(this);
+    }
+
+    switchLayers = (newLayer:any) => {
+        this.state.layer.queryFeatures().then((result: any) => {
+            this.state.layer.applyEdits({deleteFeatures:result.features})
+        });
+        if (this.state.layer) {
+            this.state.layer.applyEdits({addFeatures:newLayer})
+        }
+    }
+
+    loadLayer = () => {
         loadModules(["esri/Graphic", "esri/layers/GraphicsLayer", "esri/geometry/Polygon"]).then(([Graphic, GraphicsLayer, Polygon]) => {
             const graphicsLayer = new GraphicsLayer();
-            props.map.add(graphicsLayer);
+            this.state.map.add(graphicsLayer);
             const polygonGraphic1 = new Graphic({
                 geometry: new Polygon(processPolygon(polygon1)),
                 attributes: {
-                    ID_NO: "15933",
+                    ID_NO: 15933,
                     POPULATION: 12000,
                     SUBSPECIES: "ellioti",
                     BINOMIAL: "Pan troglodytes",
@@ -91,7 +113,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
             const polygonGraphic2 = new Graphic({
                 geometry: new Polygon(processPolygon(polygon2)),
                 attributes: {
-                    ID_NO: "12943",
+                    ID_NO: 12943,
                     POPULATION: 2400,
                     SUBSPECIES: "troglodytes",
                     BINOMIAL: "Pan troglodytes",
@@ -103,7 +125,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
             const polygonGraphic3 = new Graphic({
                 geometry: new Polygon(processPolygon(polygon3)),
                 attributes: {
-                    ID_NO: "95441",
+                    ID_NO: 95441,
                     POPULATION: 105,
                     SUBSPECIES: "schweinfurthii",
                     BINOMIAL: "Pan troglodytes",
@@ -115,7 +137,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
             const polygonGraphic4 = new Graphic({
                 geometry: new Polygon(processPolygon(polygon4)),
                 attributes: {
-                    ID_NO: "61445",
+                    ID_NO: 61445,
                     POPULATION: 10000,
                     SUBSPECIES: "verus",
                     BINOMIAL: "Pan troglodytes",
@@ -132,7 +154,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                     easternChimpanzeeLayer = new FeatureLayer({
                         supportsEditing: true,
                         supportsAdd: true,
-                        source: graphics,
+                        source: [graphics[2], graphics[3]],
                         fields: fields,
                         objectIdField: "ID_NO",
                         renderer: {
@@ -188,36 +210,21 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                         title: "Chimpanzee",
 
                     });
-                    setLayer(easternChimpanzeeLayer);
-                    easternChimpanzeeLayer.queryFeatures().then(function (result: any) {
-                        // console.log(result.features);  
-                    });
-                    if (!layer) {
-                        props.map.add(easternChimpanzeeLayer);
+                    if (!this.state.layer) {
+                        this.state.map.add(easternChimpanzeeLayer);
                     }
+                    this.setState({layer:easternChimpanzeeLayer});
+                    setTimeout(() => {
+                        this.switchLayers([graphics[0], graphics[1]])
+                    }, 2000);
                 })
         });
-
-    }, []);
-        return null;
-    }
-
-export default class GlobeMap extends React.Component<any, globeState> {
-    constructor (props: any) {
-        super(props);
-        this.state = {
-            status: "loading",
-            map: null,
-            view: null,
-            editorLoaded: false,
-        };
-        this.handleMapLoad = this.handleMapLoad.bind(this);
-        this.handleFail = this.handleFail.bind(this);
     }
 
     componentDidUpdate() {
         // if the view exists
-        if (this.state.view && !this.state.editorLoaded) {
+        if (this.state.map && this.state.view && !this.state.editorLoaded) {
+            this.loadLayer()
             // load the editor widget
             loadModules(["esri/widgets/Editor"]).then(([Editor]) => {
                 const editor = new Editor({
@@ -241,9 +248,9 @@ export default class GlobeMap extends React.Component<any, globeState> {
             this.setState({editorLoaded: true});
         }
         if (this.props.mapEditMode && this.state.editorLoaded) {
-            (document.getElementsByClassName("esri-ui-top-right")[0].style.display = "auto");
+            document.getElementsByClassName("esri-ui-top-right")[0].style.display = "auto";
         } else if (this.state.editorLoaded) {
-            (document.getElementsByClassName("esri-ui-top-right")[0].style.display = "none");
+            document.getElementsByClassName("esri-ui-top-right")[0].style.display = "none";
         }
     }
 
@@ -258,11 +265,6 @@ export default class GlobeMap extends React.Component<any, globeState> {
                     zoom: 1,
                 }}
             >
-                <EastChimpanzeeFeatureLayer
-                    featureLayerProperties={{
-                        url: "https://services3.arcgis.com/LyHBUBQ7sNYDeUPl/arcgis/rest/services/redlist_species_data_7b024e640fd848a2adf08e43737b5cb3/FeatureServer/0",
-                    }}
-                ></EastChimpanzeeFeatureLayer>
             </Scene>
         );
     }
