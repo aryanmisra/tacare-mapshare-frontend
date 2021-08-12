@@ -190,7 +190,7 @@ const EastChimpanzeeFeatureLayer = (props: any) => {
                     });
                     setLayer(easternChimpanzeeLayer);
                     easternChimpanzeeLayer.queryFeatures().then(function (result: any) {
-                        console.log(result.features);  
+                        // console.log(result.features);  
                     });
                     if (!layer) {
                         props.map.add(easternChimpanzeeLayer);
@@ -234,16 +234,16 @@ export default class GlobeMap extends React.Component<any, globeState> {
                 this.state.view.hitTest(event, opts).then(function (response: any) {
                     if (response.results.length) {
                         // attributes of a clicked layer can be accessed here
-                        console.log(response.results[0].graphic.attributes);
+                        // console.log(response.results[0].graphic.attributes);
                     }
                 });
             });
             this.setState({editorLoaded: true});
         }
         if (this.props.mapEditMode && this.state.editorLoaded) {
-            console.log((document.getElementsByClassName("esri-ui-top-right")[0].style.display = "auto"));
+            (document.getElementsByClassName("esri-ui-top-right")[0].style.display = "auto");
         } else if (this.state.editorLoaded) {
-            console.log((document.getElementsByClassName("esri-ui-top-right")[0].style.display = "none"));
+            (document.getElementsByClassName("esri-ui-top-right")[0].style.display = "none");
         }
     }
 

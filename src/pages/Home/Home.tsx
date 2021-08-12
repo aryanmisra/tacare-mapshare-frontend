@@ -18,15 +18,16 @@ import {useRecoilValue} from "recoil";
 import {getAllBranches} from "../../services/branch";
 import Branch from "../../interfaces/Branch";
 import "./home.css";
+import { logout } from "../../helpers/persistence";
 
 export function Home(): React.ReactElement {
     const [loaded, setLoaded] = useState(false);
     const currentSpecies = useRecoilValue(conservationState);
     const [menuMode, setMenuMode] = useState(-1);
-    const [userType, setuserType] = useState("admin");
+    const [user, setUser] = useState(null);
     const [currentBranch, setCurrentBranch] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState([-500, -500, -500, -500]);
-    const [mapEditMode, setMapEditMode] = useState(true);
+    const [mapEditMode, setMapEditMode] = useState(false);
     const [speciesCardOpen, setSpeciesCardOpen] = useState(true);
     const userValue = useRecoilValue(userState);
     const loggedIn = useRecoilValue(loggedInState);
@@ -35,6 +36,7 @@ export function Home(): React.ReactElement {
 
     useEffect(() => {
         if (loggedIn) {
+            setUser(userValue)
             getAllBranches()
                 .then((response) => {
                     console.log(response.data);
@@ -56,23 +58,9 @@ export function Home(): React.ReactElement {
         } else {
             setSidebarOpen([-500, 55, -500, 55]);
         }
-        // console.log(user)
+        console.log(menuMode)
     }, [menuMode]);
 
-    // const branches = [
-    //     {name: "branch #2423", author: "eshwar", status: 0},
-    //     {name: "branch #123", author: "eshwar", status: 0},
-    //     {name: "branch #324234", author: "eshwar", status: 1},
-    //     {name: "branch #234423", author: "eshwar", status: 2},
-    //     {name: "branch #1232423", author: "eshwar", status: 0},
-    //     {name: "branch #212423", author: "eshwar", status: 0},
-    //     {name: "branch #3331", author: "asd", status: 0},
-    //     {name: "branch #23", author: "asd", status: 0},
-    //     {name: "branch #1233", author: "asd", status: 1},
-    //     {name: "branch #3456", author: "asd", status: 0},
-    //     {name: "branch #2133", author: "asd", status: 2},
-    //     {name: "branch #52456", author: "asd", status: 2},
-    // ]
     return (
         <>
             <div style={{pointerEvents:!loaded?'auto':'none', opacity:!loaded?1:0, transition: '0.5s cubic-bezier(.69,.09,.37,.94)'}} className="loading-container">
@@ -133,7 +121,7 @@ export function Home(): React.ReactElement {
                     </div>
                 </div>
                 <div id="sidebar-container1" className="sidebar-container" style={{marginLeft: sidebarOpen[0]}}>
-                    <SidebarMenu1 userType={userType} />
+                    <SidebarMenu1 />
                 </div>
                 <div id="sidebar-container2" className="sidebar-container" style={{marginLeft: sidebarOpen[1]}}>
                     <SidebarMenu2
@@ -141,11 +129,11 @@ export function Home(): React.ReactElement {
                         setCurrentBranch={setCurrentBranch}
                         setMenuMode={setMenuMode}
                         branches={branches}
-                        userType={userType}
+                        user={user}
                     />
                 </div>
                 <div id="sidebar-container3" className="sidebar-container" style={{marginLeft: sidebarOpen[2]}}>
-                    <SidebarMenu3 branches={branches} />
+                    <SidebarMenu3 user={user} branches={branches} />
                 </div>
                 <div id="sidebar-container4" className="sidebar-container" style={{marginLeft: sidebarOpen[3]}}>
                     <SidebarMenu4
@@ -153,7 +141,7 @@ export function Home(): React.ReactElement {
                         setCurrentBranch={setCurrentBranch}
                         setMenuMode={setMenuMode}
                         branches={branches}
-                        userType={userType}
+                        user={user}
                     />
                 </div>
                 <div className="title-container">
@@ -166,7 +154,7 @@ export function Home(): React.ReactElement {
                     </div>
                 ) : (
                     <div className="login-container">
-                        <button onClick={() => (window.location.href = "/logout")}>LOGOUT</button>
+                        <button onClick={() => {logout();window.location.assign("/")}}>LOGOUT</button>
                     </div>
                 )}
                 <div className="species-card-toggle" style={{transform: speciesCardOpen ? "scale(0)" : "scale(1)"}}>

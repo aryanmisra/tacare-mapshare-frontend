@@ -7,9 +7,8 @@ import { useRecoilValue } from "recoil";
 import { loggedInState, userState } from "../../store";
 import Branch from "../../interfaces/Branch";
 
-export default function SidebarMenu3({ branches }): React.ReactElement {
+export default function SidebarMenu3({ user, branches }): React.ReactElement {
     const loggedIn = useRecoilValue(loggedInState);
-    const user = useRecoilValue(userState);
     const notLoggedInView = (
         <div className="sidebar-inner-container">
             <div className="sidebar-title-container">

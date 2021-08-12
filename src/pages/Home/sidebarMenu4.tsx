@@ -5,7 +5,7 @@ import "./home.css";
 import "./sidebar.css";
 import { BiArrowBack } from "react-icons/bi";
 
-export default function SidebarMenu4({ userType, branches, setMenuMode, currentBranch, setCurrentBranch }): React.ReactElement {
+export default function SidebarMenu4({ user, branches, setMenuMode, currentBranch, setCurrentBranch }): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
 
     const edits = [{ id: "12334523415" }, { id: "6231323415" }, { id: "3536423415" }, { id: "920434523415" }, { id: "888334523415" }, { id: "1223423415" }];
@@ -15,14 +15,14 @@ export default function SidebarMenu4({ userType, branches, setMenuMode, currentB
             <div className="sidebar-title-container">
                 <h1>
                     <BiArrowBack size={30} color="white" style={{ display: "inline", marginTop: -4 }} onClick={() => setMenuMode(1)} />
-                    &nbsp;{currentBranch.name}
+                    &nbsp;Branch #{currentBranch.slug}
                 </h1>
             </div>
             <Text color="white" fontSize="14px">
-                CAP: Eastern Chimpanzee
+                Conservation: {currentBranch.conservationSlug}
             </Text>
             <Text color="white" fontSize="14px">
-                ID#: 02349587230
+                ID#: {currentBranch._id}
             </Text>
             <Text mt="4" color="white" fontSize="20px">
                 Expert Information:
@@ -94,7 +94,7 @@ export default function SidebarMenu4({ userType, branches, setMenuMode, currentB
                     </Tab>
                 </TabList>
             </Tabs>
-            {userType == "admin" && (
+            {user && user.userType == "admin" && (
                 <Button
                     pos="fixed"
                     bottom="85px"

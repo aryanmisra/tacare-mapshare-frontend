@@ -27,8 +27,6 @@ export const App = (): ReactElement => {
             <RecoilRoot>
                 <ChakraProvider theme={tacareMapShareTheme} resetCSS>
                     <BrowserRouter>
-                        {/* TODO: implement auth to set loggedOut */}
-
                         <Suspense fallback={<></>}>
                             <Container maxW="container.xl">
                                 <Switch>
@@ -47,7 +45,6 @@ export const App = (): ReactElement => {
                                 </Switch>
                             </Container>
                         </Suspense>
-                        {/* </Box> */}
                     </BrowserRouter>
                 </ChakraProvider>
             </RecoilRoot>

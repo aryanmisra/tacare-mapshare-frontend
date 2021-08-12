@@ -8,7 +8,7 @@ import { useRecoilState } from "recoil";
 import Conservation from "../../interfaces/Conservation";
 import axios from "axios";
 
-export default function SidebarMenu1({ userType }): React.ReactElement {
+export default function SidebarMenu1(): React.ReactElement {
     const [conservationGroup, setConservationGroup] = useRecoilState<Conservation>(conservationState);
     const [conservationGroupList, setConservationGroupList] = useState<Conservation[]>([]);
     useEffect(() => {

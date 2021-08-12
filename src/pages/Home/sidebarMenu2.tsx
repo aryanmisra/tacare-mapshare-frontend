@@ -4,7 +4,9 @@ import * as globalVars from "../../globalVars";
 import "./home.css";
 import "./sidebar.css";
 
-export default function SidebarMenu2({ userType, branches, setMenuMode, currentBranch, setCurrentBranch }): React.ReactElement {
+
+
+export default function SidebarMenu2({ user, branches, setMenuMode, currentBranch, setCurrentBranch }): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
 
     const notLoggedIn = (
@@ -53,7 +55,7 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
                     <TabPanels>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.author == "eshwar" && branch.status == 0)
+                                .filter((branch) => branch.owner.email == user.email && branch.auditStatus.status == 0)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -68,7 +70,7 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
                                             justifyContent="space-between"
                                         >
                                             <Text color="white" pl="8" fontWeight="light">
-                                                {branch.name}
+                                            Branch #{branch.slug}
                                             </Text>
                                             <Text
                                                 color="white"
@@ -87,7 +89,7 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.author == "eshwar" && branch.status == 1)
+                                .filter((branch) => branch.owner.email == user.email && branch.auditStatus.status == 1)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -102,7 +104,7 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
                                             justifyContent="space-between"
                                         >
                                             <Text color="white" pl="8" fontWeight="light">
-                                                {branch.name}
+                                            Branch #{branch.slug}
                                             </Text>
                                             <Text
                                                 color="white"
@@ -121,7 +123,7 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.author == "eshwar" && branch.status == 2)
+                                .filter((branch) => branch.owner.email == user.email && branch.auditStatus.status == 2)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -136,7 +138,7 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
                                             justifyContent="space-between"
                                         >
                                             <Text color="white" pl="8" fontWeight="light">
-                                                {branch.name}
+                                            Branch #{branch.slug}
                                             </Text>
                                             <Text
                                                 color="white"
@@ -162,7 +164,7 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
                 </Text>
                 <Box p="0" pl="2" pr="2" mt="3" maxH="174px" overflowY="auto">
                     {branches
-                        .filter((branch) => branch.author != "eshwar" && branch.status == 0)
+                        .filter((branch) => branch.owner.email != user.email && branch.auditStatus.status == 0)
                         .map((branch: any, id: any) => {
                             return (
                                 <Flex
@@ -177,7 +179,7 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
                                     justifyContent="space-between"
                                 >
                                     <Text color="white" pl="8" fontWeight="light">
-                                        {branch.name}
+                                    Branch #{branch.slug}
                                     </Text>
                                     <Text
                                         color="white"
@@ -344,10 +346,12 @@ export default function SidebarMenu2({ userType, branches, setMenuMode, currentB
         </div>
     );
 
-    if (userType == "user") {
+    if (user) {
+    if (user.userType == "user") {
         return expert;
-    } else if (userType == "admin") {
+    } else if (user.userType == "admin") {
         return admin;
+    }
     }
     return notLoggedIn;
 }
