@@ -210,7 +210,7 @@ export function Home(): React.ReactElement {
 
         <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bgColor={globalVars.colors.gray3} color={"white"}>
           <ModalHeader>Create a new branch</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -236,7 +236,7 @@ export function Home(): React.ReactElement {
 
       <Modal isOpen={isOpenModification} onClose={onCloseModification}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bgColor={globalVars.colors.gray3} color={"white"}>
           <ModalHeader>Submit a modification</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

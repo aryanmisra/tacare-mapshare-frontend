@@ -50,7 +50,7 @@ export default function SidebarMenu4({ startNewModification, user, branches, set
 <>
     <Modal isOpen={isOpenCloseBranch} onClose={onCloseCloseBranch}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bgColor={globalVars.colors.gray3} color={"white"}>
           <ModalHeader>Confirm Action</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -67,7 +67,7 @@ export default function SidebarMenu4({ startNewModification, user, branches, set
 
       <Modal isOpen={isOpenMergeBranch} onClose={onCloseMergeBranch}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bgColor={globalVars.colors.gray3} color={"white"}>
           <ModalHeader>Confirm Action</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -84,7 +84,7 @@ export default function SidebarMenu4({ startNewModification, user, branches, set
 
       <Modal isOpen={isOpenRevertBranch} onClose={onCloseRevertBranch}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bgColor={globalVars.colors.gray3} color={"white"}>
           <ModalHeader>Confirm Action</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
