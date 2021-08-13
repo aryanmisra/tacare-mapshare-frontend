@@ -5,7 +5,7 @@ import "./home.css";
 import "./sidebar.css";
 import {BiArrowBack} from "react-icons/bi";
 import {getBranchCommits, deleteBranch, revertCommits, mergeBranch} from "../../services/branch";
-import {startVirtualAudit} from "../../services/audit";
+import {startVirtualAudit, auditImageUpload} from "../../services/audit";
 import {
     Modal,
     ModalOverlay,
@@ -23,9 +23,12 @@ import {
 export default function SidebarMenu4({startNewModification, user, branches, setMenuMode, currentBranch, setCurrentBranch, currentCommit, setCurrentCommit, setSpeciesCardOpen}): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
     const [commits, setCommits] = useState([])
+    const [fileUploadErr, setFileUploadErr] = useState(false)
+    const [imageUploaded, setImageUploaded] = useState(false)
     const {isOpen: isOpenRevertBranch, onOpen: onOpenRevertBranch, onClose: onCloseRevertBranch} = useDisclosure()
     const {isOpen: isOpenMergeBranch, onOpen: onOpenMergeBranch, onClose: onCloseMergeBranch} = useDisclosure()
     const {isOpen: isOpenCloseBranch, onOpen: onOpenCloseBranch, onClose: onCloseCloseBranch} = useDisclosure()
+    const {isOpen: isOpenAudit, onOpen: onOpenAudit, onClose: onCloseAudit} = useDisclosure()
     function compare(a, b) {
         if (a.order > b.order) {
             return -1;
@@ -34,6 +37,35 @@ export default function SidebarMenu4({startNewModification, user, branches, setM
             return 1;
         }
         return 0;
+    }
+
+    function getBase64(file, cb) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            cb(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+
+    function startAudit() {
+        let idCardBase64 = '';
+        console.log(document.getElementById("image-upload").files[0].size)
+        if (document.getElementById("image-upload").files[0].size > 2100000) {
+            document.getElementById("image-upload").value = null
+            setFileUploadErr(true)
+        }
+        else {
+            setFileUploadErr(false)
+            getBase64(document.getElementById("image-upload").files[0], (result) => {
+                idCardBase64 = result;
+                auditImageUpload(currentBranch.slug, result).then(()=>{
+                    startVirtualAudit(currentBranch.slug, user._id)   
+                })
+            });
+        }
     }
 
     useEffect(() => {
@@ -101,7 +133,24 @@ export default function SidebarMenu4({startNewModification, user, branches, setM
                 </ModalContent>
             </Modal>
 
-
+            <Modal isOpen={isOpenAudit} onClose={onCloseAudit}>
+                <ModalOverlay />
+                <ModalContent bgColor={globalVars.colors.gray3} color={"white"}>
+                    <ModalHeader>Confirm Action</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                    <input type="file" id="image-upload" accept="image/jpeg, image/x-png" onChange={()=>setImageUploaded(document.getElementById("image-upload").value)}/>
+                    <Text color={globalVars.colors.red + ' !important'} mt="2" mb="2">{fileUploadErr && "File too large"}</Text>
+                        Upload a JPG screenshot of the map before proceeding with a virtual audit. (Max 2MB)
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button bgColor={globalVars.colors.gray1} mr={3} onClick={onCloseAudit}>
+                            Cancel
+                        </Button>
+                        <Button bgColor={globalVars.colors.blue2} disabled={!imageUploaded} onClick={() => startAudit()}>Confirm</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
 
 
 
@@ -218,7 +267,7 @@ export default function SidebarMenu4({startNewModification, user, branches, setM
                             color="white"
                             w="380px"
                             _hover={{bgColor: globalVars.colors.blue1}}
-                            onClick={() => startVirtualAudit(currentBranch.slug, user._id)}
+                            onClick={() => onOpenAudit()}
                         >
                             {currentBranch.auditStatus.envelopeId != ""?"Res":"S"}tart Virtual audit
                         </Button>

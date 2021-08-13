@@ -251,8 +251,8 @@ export default function SidebarMenu2({
                     </TabList>
                     <TabPanels>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches.reverse()
-                                .filter((branch) => branch.slug!="main" && branch.status == 0)
+                            {branches
+                                .filter((branch) => branch.slug!="main" && branch.status == 0).reverse()
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -285,8 +285,8 @@ export default function SidebarMenu2({
                                 })}
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches.reverse()
-                                .filter((branch) => branch.status == 1)
+                            {branches
+                                .filter((branch) => branch.status == 1).reverse()
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -319,8 +319,8 @@ export default function SidebarMenu2({
                                 })}
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches.reverse()
-                                .filter((branch) => branch.status == 2)
+                            {branches
+                                .filter((branch) => branch.status == 2).reverse()
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
