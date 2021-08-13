@@ -3,7 +3,6 @@ import {loadModules} from "esri-loader";
 import {Scene} from "@esri/react-arcgis";
 import {conservationState} from "../../store";
 import {useRecoilValue} from "recoil";
-import {polygon1, polygon2, polygon3, polygon4} from "./polygons";
 import * as globalVars from "../../globalVars";
 
 interface globeState {

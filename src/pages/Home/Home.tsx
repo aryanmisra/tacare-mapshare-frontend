@@ -19,7 +19,7 @@ import {getAllBranches, commitToBranch} from "../../services/branch";
 import Branch from "../../interfaces/Branch";
 import "./home.css";
 import {logout} from "../../helpers/persistence";
-import {getBranchCommits, createBranch} from "../../services/branch";
+import {getBranchCommits, createBranch, getBranch} from "../../services/branch";
 import {loadModules} from "esri-loader";
 
 import {
@@ -180,6 +180,23 @@ export function Home(): React.ReactElement {
                     })
                         .catch((error) => console.error);
                 });
+        }
+        else {
+            getBranchCommits("main").then((resp) => {
+                setMaster(resp.data.sort(compare)[0])
+                const temp: any = [];
+                loadModules(["esri/Graphic", "esri/layers/GraphicsLayer", "esri/geometry/Polygon"]).then(([Graphic, GraphicsLayer, Polygon]) => {
+                    console.log(resp.data.sort(compare)[0].features);
+                    resp.data.sort(compare)[0].features.forEach((feature: any) => {
+                        const graphic = new Graphic({
+                            geometry: new Polygon(processPolygon(JSON.parse(feature.geometry))),
+                            attributes: feature.attributes,
+                        });
+                        temp.push(graphic);
+                    });
+                });
+                setHomeCommit(temp);
+            })
         }
     }, []);
 

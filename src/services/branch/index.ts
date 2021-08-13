@@ -9,11 +9,11 @@ export const getConservations = async () => {
 };
 
 export const getBranchCommits = async (branchSlug: string) => {
-    return await authClient.get(`/branch/${branchSlug}/commits`);
+    return await client.get(`/branch/${branchSlug}/commits`);
 };
 
 export const getBranch = async (branchSlug: string) => {
-    return await authClient.get(`/branch/${branchSlug}`);
+    return await client.get(`/branch/${branchSlug}`);
 };
 
 export const createBranch = async (

@@ -43,11 +43,8 @@ export default function SidebarMenu1(): React.ReactElement {
                 <Text fontSize="20px" color="white">
                     Our mission
                 </Text>
-                <Text fontSize="14px" color="white">
-                    Nam non elementum odio. Phasellus consequat, felis sed pulvinar accumsan, nisl tellus convallis orci, quis gravida augue diam ac magna.
-                    Aliquam interdum ut nibh ut blandit. In congue justo et mi blandit condimentum. Donec odio est, semper nec condimentum sagittis, semper nec
-                    ligula. Cras ornare lacus turpis, sit amet maximus felis semper sed. Suspendisse aliquet mi sit amet diam elementum, congue mollis nibh
-                    pellentesque. Praesent lobortis non odio eu pulvinar. Aliquam at justo euismod mi sagittis pretium vitae et odio vitae.
+                <Text fontSize="16px" color="white">
+                Creating a seamless process for the Jane Goodall Institute to faster review, change, update and approve dynamic conservation maps in collaboration with stakeholders all over the world.
                 </Text>
             </Box>
         </div>
