@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { loadModules } from "esri-loader";
-import { Scene } from "@esri/react-arcgis";
-import { conservationState } from "../../store";
-import { useRecoilValue } from "recoil";
-import { polygon1, polygon2, polygon3, polygon4 } from "./polygons";
+import React, {useState, useEffect} from "react";
+import {loadModules} from "esri-loader";
+import {Scene} from "@esri/react-arcgis";
+import {conservationState} from "../../store";
+import {useRecoilValue} from "recoil";
+import {polygon1, polygon2, polygon3, polygon4} from "./polygons";
 import * as globalVars from "../../globalVars";
 
 interface globeState {
@@ -79,7 +79,7 @@ const fields = [
 ];
 
 export default class GlobeMap extends React.Component<any, globeState> {
-    constructor(props: any) {
+    constructor (props: any) {
         super(props);
         this.state = {
             initalLoad: false,
@@ -96,7 +96,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
     formatLayer = (layerInfo: any) => {
         const temp = [];
         layerInfo.map((feature) => {
-            temp.push({ attributes: feature.attributes, geometry: JSON.stringify(feature.geometry.rings) });
+            temp.push({attributes: feature.attributes, geometry: JSON.stringify(feature.geometry.rings)});
         });
         return temp;
     };
@@ -105,11 +105,11 @@ export default class GlobeMap extends React.Component<any, globeState> {
         if (this.state.layer) {
             this.state.layer.queryFeatures().then((result: any) => {
                 console.log(result.features);
-                this.state.layer.applyEdits({ deleteFeatures: result.features });
+                this.state.layer.applyEdits({deleteFeatures: result.features});
             });
         }
         if (this.state.layer) {
-            this.state.layer.applyEdits({ addFeatures: newLayer });
+            this.state.layer.applyEdits({addFeatures: newLayer});
         }
     };
 
@@ -160,7 +160,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
                 },
                 labelingInfo: [
                     {
-                        labelExpressionInfo: { expression: "$feature.POPULATION" },
+                        labelExpressionInfo: {expression: "$feature.POPULATION"},
                         symbol: {
                             type: "text",
                             color: [103, 35, 20, 255],
@@ -176,19 +176,24 @@ export default class GlobeMap extends React.Component<any, globeState> {
             if (!this.state.layer) {
                 this.state.map.add(easternChimpanzeeLayer);
             }
-            this.setState({ layer: easternChimpanzeeLayer });
+            this.setState({layer: easternChimpanzeeLayer});
         });
     };
 
     componentDidUpdate(prevProps: any) {
-        if (this.props.exportMap) {
+        if (this.props.exportMap[0]) {
             this.state.layer.queryFeatures().then((result: any) => {
-                this.props.publishNewBranch(this.formatLayer(result.features));
+                if (this.props.exportMap[1] == "branch") {
+                    this.props.publishNewBranch((this.formatLayer(result.features)))
+                }
+                else {
+                    this.props.publishNewModification((this.formatLayer(result.features)))
+                }
             });
         }
 
         if (this.props.homeCommit && !this.state.initalLoad && this.state.layer) {
-            this.setState({ initalLoad: true });
+            this.setState({initalLoad: true});
             this.switchLayers(this.props.homeCommit);
         }
         if (this.props.currentCommit != prevProps.currentCommit) {
@@ -219,7 +224,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
                 // add widget to the view
                 this.state.view.ui.add(editor, "top-right");
             });
-            this.setState({ editorLoaded: true });
+            this.setState({editorLoaded: true});
         }
         if (this.props.mapEditMode && this.state.editorLoaded) {
             document.getElementsByClassName("esri-ui-top-right")[0].style.display = "block";
@@ -233,7 +238,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
             <Scene
                 onLoad={this.handleMapLoad}
                 onFail={this.handleFail}
-                mapProperties={{ basemap: "national-geographic" }}
+                mapProperties={{basemap: "national-geographic"}}
                 viewProperties={{
                     center: [18, 5],
                     zoom: 1,
@@ -243,7 +248,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
     }
 
     handleMapLoad(map: any, view: any) {
-        this.setState({ map: map, view: view, status: "loaded" });
+        this.setState({map: map, view: view, status: "loaded"});
         setTimeout(() => {
             this.props.setLoaded(true);
         }, 1500);
@@ -251,6 +256,6 @@ export default class GlobeMap extends React.Component<any, globeState> {
 
     handleFail(e: any) {
         console.error(e);
-        this.setState({ status: "failed" });
+        this.setState({status: "failed"});
     }
 }

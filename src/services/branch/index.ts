@@ -1,4 +1,4 @@
-import { authClient, client } from "../index";
+import {authClient, client} from "../index";
 
 export const getAllBranches = async () => {
     return await client.get("/branch/all");
@@ -19,7 +19,7 @@ export const getBranch = async (branchSlug: string) => {
 export const createBranch = async (
     branchNote: string,
     commitNote: string,
-    features: Array<{ geometry: string; attributes: any }>,
+    features: Array<{geometry: string; attributes: any}>,
     conservationSlug: string
 ) => {
     return await authClient.post("/branch/create", {
@@ -30,7 +30,7 @@ export const createBranch = async (
     });
 };
 
-export const commitToBranch = async (branchSlug: string, commitNote: string, features: Array<{ geometry: string; attributes: any }>) => {
+export const commitToBranch = async (branchSlug: string, commitNote: string, features: Array<{geometry: string; attributes: any}>) => {
     return await authClient.post("/branch/commit", {
         branchSlug: branchSlug,
         commitNote: commitNote,
