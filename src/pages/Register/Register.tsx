@@ -65,7 +65,7 @@ export function Register(): ReactElement {
                     style={{ display: "inline", marginTop: -4, cursor: "pointer" }}
                     onClick={() => window.location.assign("/")}
                 />
-                &nbsp;Create an Account
+                &nbsp;Create Expert Account
             </Text>
 
             <Text fontSize="md" color="gray.600">
@@ -95,7 +95,7 @@ export function Register(): ReactElement {
                 {emailErr ? <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="24" /> : null}
             </HStack>
 
-            <Text fontSize="md" fontWeight="bold">
+            {/* <Text fontSize="md" fontWeight="bold">
                 User Type
             </Text>
             <Select placeholder="" value={userType} onChange={(e) => setUserType(e.target.value)}>
@@ -105,7 +105,7 @@ export function Register(): ReactElement {
                 <option style={{ backgroundColor: globalVars.colors.gray1 }} value="admin">
                     GIS User/Admin
                 </option>
-            </Select>
+            </Select> */}
 
             <Text fontSize="md" fontWeight="bold">
                 Password
