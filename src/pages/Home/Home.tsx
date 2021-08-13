@@ -15,7 +15,7 @@ import SidebarMenu3 from "./sidebarMenu3";
 import SidebarMenu4 from "./sidebarMenu4";
 import {conservationState, userState, loggedInState} from "../../store";
 import {useRecoilValue} from "recoil";
-import {getAllBranches} from "../../services/branch";
+import {getAllBranches, commitToBranch} from "../../services/branch";
 import Branch from "../../interfaces/Branch";
 import "./home.css";
 import { logout } from "../../helpers/persistence";
@@ -55,9 +55,11 @@ export function Home(): React.ReactElement {
     const [homeCommit, setHomeCommit] = useState(null)
     const [master, setMaster] = useState(null)
     const [newBranchInfo, setNewBranchInfo] = useState(null)
-    const [exportMap, setExportMap] = useState(false)
+    const [newModificationInfo, setNewModificationInfo] = useState(null)
+    const [exportMap, setExportMap] = useState([false, ""])
     // console.log(userValue, loggedIn);
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen:isOpenModification, onOpen:onOpenModification, onClose:onCloseModification } = useDisclosure()
 
     function compare( a, b ) {
         if ( a.order > b.order ){
@@ -97,7 +99,7 @@ export function Home(): React.ReactElement {
     function startNewBranch() {
         setMapEditMode(true);
         onOpen();
-        // setCurrentCommit(master)
+        setCurrentCommit(master)
         document.getElementsByClassName("navbar-container")[0].style.display = "none"
         document.getElementById("sidebar-container1").style.display = "none"
         document.getElementById("sidebar-container2").style.display = "none"
@@ -121,11 +123,43 @@ export function Home(): React.ReactElement {
         onClose()
     }
 
+
+    function startNewModification() {
+        setMapEditMode(true);
+        onOpenModification();
+        document.getElementsByClassName("navbar-container")[0].style.display = "none"
+        document.getElementById("sidebar-container1").style.display = "none"
+        document.getElementById("sidebar-container2").style.display = "none"
+        document.getElementById("sidebar-container3").style.display = "none"
+        document.getElementById("sidebar-container4").style.display = "none"
+    }
+
+    function stopNewModification() {
+        setMapEditMode(false);
+        setNewBranchInfo(null)
+        document.getElementsByClassName("navbar-container")[0].style.display = "flex"
+        document.getElementById("sidebar-container1").style.display = "block"
+        document.getElementById("sidebar-container2").style.display = "block"
+        document.getElementById("sidebar-container3").style.display = "block"
+        document.getElementById("sidebar-container4").style.display = "block"
+    }
+    const newModificationFormSubmitted=(e)=> {
+        e.preventDefault()
+        setNewModificationInfo({commitNote:e.target[0].value, branchSlug:currentBranch.slug})
+        onCloseModification()
+    }
+
+    function publishNewModification(layerInfo) {
+        // console.log(newBranchInfo.branchNote, newBranchInfo.commitNote, layerInfo, newBranchInfo.conservationSlug)
+        commitToBranch(newModificationInfo.branchSlug, newModificationInfo.commitNote, layerInfo).then((resp)=>{window.location.assign("/")})
+    }
+
     useEffect(() => {
         if (loggedIn) {
             setUser(userValue)
             getAllBranches()
                 .then((response) => {
+                    // console.log(response.data)      
                     setBranches(response.data);
                     getBranchCommits("main").then((resp)=>{
                         setMaster(resp.data.sort(compare)[0])
@@ -174,10 +208,10 @@ export function Home(): React.ReactElement {
     return (
         <>
 
-<Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Creat a new branch</ModalHeader>
+          <ModalHeader>Create a new branch</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
           <form onSubmit={newBranchFormSubmitted}>
@@ -200,6 +234,28 @@ export function Home(): React.ReactElement {
         </ModalContent>
       </Modal>
 
+      <Modal isOpen={isOpenModification} onClose={onCloseModification}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Submit a modification</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          <form onSubmit={newModificationFormSubmitted}>
+            <FormControl id="branch-note">
+            <FormLabel>Commit note</FormLabel>
+            <Textarea required placeholder="Enter your new commit's note" />
+            </FormControl>
+            <Flex mt="4" flexDir="row" justifyContent="flex-end">
+            <Button  bgColor={globalVars.colors.gray1} mr={3} onClick={onCloseModification}>
+              Cancel
+            </Button>
+            <Button type="submit" bgColor={globalVars.colors.blue2}>Continue</Button>
+            </Flex>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
 
             <div style={{pointerEvents:!loaded?'auto':'none', opacity:!loaded?1:0, transition: '0.5s cubic-bezier(.69,.09,.37,.94)'}} className="loading-container">
                 <div className="loading-text-container">
@@ -211,7 +267,7 @@ export function Home(): React.ReactElement {
 
             <div className="body-container">
                 <div className="globe-container">
-                    <GlobeMap publishNewBranch={publishNewBranch} exportMap={exportMap} homeCommit={homeCommit} mapEditMode={mapEditMode} setLoaded={setLoaded} currentCommit={currentCommit}/>
+                    <GlobeMap publishNewModification={publishNewModification} publishNewBranch={publishNewBranch} exportMap={exportMap} homeCommit={homeCommit} mapEditMode={mapEditMode} setLoaded={setLoaded} currentCommit={currentCommit}/>
                 </div>
                 <div className="navbar-container">
                     <div className="link-container">
@@ -286,6 +342,7 @@ export function Home(): React.ReactElement {
                         currentCommit={currentCommit}
                         setCurrentCommit={setCurrentCommit}
                         setSpeciesCardOpen={setSpeciesCardOpen}
+                        startNewModification={startNewModification}
                     />
                 </div>
                 <div className="title-container">
@@ -325,8 +382,8 @@ export function Home(): React.ReactElement {
                 </div>
                 {mapEditMode && (
                     <div className="modify-layer-container">
-                        <button onClick={()=>setExportMap(true)} className="modify-button-1">Submit changes</button>
-                        <button onClick={stopNewBranch} className="modify-button-2">Cancel</button>
+                        <button onClick={()=>newBranchInfo?setExportMap([true, "branch"]):setExportMap([true, "modification"])} className="modify-button-1">Submit changes</button>
+                        <button onClick={()=>newBranchInfo?stopNewBranch():stopNewModification()} className="modify-button-2">Cancel</button>
                     </div>
                 )}
             </div>

@@ -4,12 +4,27 @@ import * as globalVars from "../../globalVars";
 import "./home.css";
 import "./sidebar.css";
 import { BiArrowBack } from "react-icons/bi";
-import {getBranchCommits} from "../../services/branch";
-
-export default function SidebarMenu4({ user, branches, setMenuMode, currentBranch, setCurrentBranch, currentCommit, setCurrentCommit, setSpeciesCardOpen}): React.ReactElement {
+import {getBranchCommits, deleteBranch, revertCommits} from "../../services/branch";
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+    FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  } from "@chakra-ui/react"
+export default function SidebarMenu4({ startNewModification, user, branches, setMenuMode, currentBranch, setCurrentBranch, currentCommit, setCurrentCommit, setSpeciesCardOpen}): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
     const [commits, setCommits] = useState([])
-
+    const { isOpen:isOpenRevertBranch, onOpen:onOpenRevertBranch, onClose:onCloseRevertBranch } = useDisclosure()
+    const { isOpen:isOpenMergeBranch, onOpen:onOpenMergeBranch, onClose:onCloseMergeBranch } = useDisclosure()
+    const { isOpen:isOpenCloseBranch, onOpen:onOpenCloseBranch, onClose:onCloseCloseBranch } = useDisclosure()
     function compare( a, b ) {
         if ( a.order > b.order ){
           return -1;
@@ -32,11 +47,67 @@ export default function SidebarMenu4({ user, branches, setMenuMode, currentBranc
     },[currentBranch])
 
     const mainMenu = currentBranch && (
+<>
+    <Modal isOpen={isOpenCloseBranch} onClose={onCloseCloseBranch}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirm Action</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          Are you sure you want to close branch #{currentBranch.slug}
+          </ModalBody>
+          <ModalFooter>
+          <Button  bgColor={globalVars.colors.gray1} mr={3} onClick={onCloseCloseBranch}>
+              Cancel
+            </Button>
+            <Button bgColor={globalVars.colors.blue2} onClick={()=>deleteBranch(currentBranch.slug).then((resp)=>{window.location.assign("/")})}>Confirm</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenMergeBranch} onClose={onCloseMergeBranch}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirm Action</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          Are you sure you want to merge branch #{currentBranch.slug}
+          </ModalBody>
+          <ModalFooter>
+          <Button  bgColor={globalVars.colors.gray1} mr={3} onClick={onCloseMergeBranch}>
+              Cancel
+            </Button>
+            <Button bgColor={globalVars.colors.blue2}>Confirm</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenRevertBranch} onClose={onCloseRevertBranch}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirm Action</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          Are you sure you want to revert branch #{currentBranch.slug} to commit #{currentCommit && currentCommit.slug}
+          </ModalBody>
+          <ModalFooter>
+          <Button  bgColor={globalVars.colors.gray1} mr={3} onClick={onCloseRevertBranch}>
+              Cancel
+            </Button>
+            <Button bgColor={globalVars.colors.blue2} onClick={()=>revertCommits(currentCommit.slug).then((resp)=>{window.location.assign("/")})}>Confirm</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+
+
+
+
         <div className="sidebar-inner-container">
             <div className="sidebar-title-container">
                 <h1>
                     <BiArrowBack size={30} color="white" style={{ display: "inline", marginTop: -4 }} onClick={() => {setMenuMode(1);setCurrentBranch(null);setCurrentCommit(null)}} />
-                    &nbsp;Branch #{currentBranch.slug}
+                    &nbsp;{currentBranch.status == 1?"MERGED":currentBranch.status == 2?"CLOSED":""} Branch #{currentBranch.slug}
                 </h1>
             </div>
             <Text color="white" fontSize="14px">
@@ -81,9 +152,26 @@ export default function SidebarMenu4({ user, branches, setMenuMode, currentBranc
                             <Text color="white" pl="8" fontWeight="light">
                                 ID#: {commit.slug} {id == 0 && "(current)"}
                             </Text>
-                            <Text
+                            {user && user.userType == "admin" && id !=0 && (
+                                <Text
+                                pos="relative"
                                 color="white"
-                                pr="8"
+                                right="-5px"
+                                fontWeight="light"
+                                cursor="pointer"
+                                onClick={() => {
+                                    setCurrentCommit(commit);
+                                    setSpeciesCardOpen(true);
+                                    onOpenRevertBranch();
+                                }}
+                            >
+                                Revert
+                            </Text>
+                            )}
+                            <Text
+                                pos="relative"
+                                color="white"
+                                right="15px"
                                 fontWeight="light"
                                 cursor="pointer"
                                 onClick={() => {
@@ -117,7 +205,8 @@ export default function SidebarMenu4({ user, branches, setMenuMode, currentBranc
                     </Tab>
                 </TabList>
             </Tabs>
-            {user && user.userType == "admin" && (
+            {user && user.userType == "admin" && currentBranch.status == 0 && (
+                <>
                 <Button
                     pos="fixed"
                     bottom="85px"
@@ -127,10 +216,26 @@ export default function SidebarMenu4({ user, branches, setMenuMode, currentBranc
                     color="white"
                     w="380px"
                     _hover={{ bgColor: globalVars.colors.blue1 }}
+                    onClick={()=>onOpenCloseBranch()}
                 >
-                    Send re-approval request
+                    Close branch #{currentBranch.slug}
                 </Button>
+                <Button
+                pos="fixed"
+                bottom="25px"
+                p="6"
+                fontWeight="light"
+                bgColor={globalVars.colors.blue2}
+                color="white"
+                w="380px"
+                _hover={{ bgColor: globalVars.colors.blue1 }}
+                onClick={()=>onOpenMergeBranch()}
+            >
+                Merge branch #{currentBranch.slug}
+            </Button>
+            </>
             )}
+            {user && user.userType != "admin" && currentBranch.status == 0 &&(
             <Button
                 pos="fixed"
                 bottom="25px"
@@ -140,11 +245,40 @@ export default function SidebarMenu4({ user, branches, setMenuMode, currentBranc
                 color="white"
                 w="380px"
                 _hover={{ bgColor: globalVars.colors.blue1 }}
+                onClick={()=>startNewModification()}
             >
                 Submit a modification
+            </Button>)}
+            {currentBranch.status == 1 && (
+                <Button
+                pos="fixed"
+                bottom="25px"
+                p="6"
+                fontWeight="light"
+                bgColor={globalVars.colors.gray2}
+                color="white"
+                w="380px"
+                _hover={{ bgColor: globalVars.colors.gray2 }}
+            >
+                Branch merged {globalVars.timeSince(new Date(currentBranch.updatedAt))}
             </Button>
-        </div>
+            )}
+            {currentBranch.status == 2 && (
+                <Button
+                pos="fixed"
+                bottom="25px"
+                p="6"
+                fontWeight="light"
+                bgColor={globalVars.colors.gray2}
+                color="white"
+                w="380px"
+                _hover={{ bgColor: globalVars.colors.gray2 }}
+            >
+                Branch closed {globalVars.timeSince(new Date(currentBranch.updatedAt))}
+            </Button>
+            )}
+        </div></>
     );
 
-    return mainMenu;
+    return (mainMenu);
 }

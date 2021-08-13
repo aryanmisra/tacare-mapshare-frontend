@@ -48,19 +48,19 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                 <Tabs variant="soft-rounded" align="center" mt="2" w="full" onChange={(index) => setFilter1(index)}>
                     <TabList w="full" justifyContent="space-evenly" bgColor={globalVars.colors.gray2} borderRadius="100">
                         <Tab _selected={{ color: "white", bg: globalVars.colors.gray1 }} color="lightgray" fontWeight="light">
-                            Pending
-                        </Tab>
-                        <Tab _selected={{ color: "white", bg: globalVars.colors.gray1 }} color="lightgray" fontWeight="light">
                             Active
                         </Tab>
                         <Tab _selected={{ color: "white", bg: globalVars.colors.gray1 }} color="lightgray" fontWeight="light">
-                            Denied
+                            Merged
+                        </Tab>
+                        <Tab _selected={{ color: "white", bg: globalVars.colors.gray1 }} color="lightgray" fontWeight="light">
+                            Closed
                         </Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.owner.email == user.email && branch.auditStatus.status == 0)
+                                .filter((branch) => branch.slug!="main" && branch.owner.email == user.email && branch.status == 0)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -94,7 +94,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.owner.email == user.email && branch.auditStatus.status == 1)
+                                .filter((branch) => branch.slug!="main" && branch.owner.email == user.email && branch.status == 1)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -128,7 +128,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.owner.email == user.email && branch.auditStatus.status == 2)
+                                .filter((branch) => branch.slug!="main" && branch.owner.email == user.email && branch.status == 2)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -169,7 +169,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                 </Text>
                 <Box p="0" pl="2" pr="2" mt="3" maxH="174px" overflowY="auto">
                     {branches
-                        .filter((branch) => branch.owner.email != user.email && branch.auditStatus.status == 0)
+                        .filter((branch) => branch.slug!="main" && branch.owner.email != user.email && branch.status == 0)
                         .map((branch: any, id: any) => {
                             return (
                                 <Flex
@@ -234,19 +234,19 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                 <Tabs variant="soft-rounded" align="center" mt="4" w="full" onChange={(index) => setFilter1(index)}>
                     <TabList w="full" justifyContent="space-evenly" bgColor={globalVars.colors.gray2} borderRadius="100">
                         <Tab _selected={{ color: "white", bg: globalVars.colors.gray1 }} color="lightgray" fontWeight="light">
-                            Pending
-                        </Tab>
-                        <Tab _selected={{ color: "white", bg: globalVars.colors.gray1 }} color="lightgray" fontWeight="light">
                             Active
                         </Tab>
                         <Tab _selected={{ color: "white", bg: globalVars.colors.gray1 }} color="lightgray" fontWeight="light">
-                            Denied
+                            Merged
+                        </Tab>
+                        <Tab _selected={{ color: "white", bg: globalVars.colors.gray1 }} color="lightgray" fontWeight="light">
+                            Closed
                         </Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.auditStatus.status == 0)
+                                .filter((branch) => branch.slug!="main" && branch.status == 0)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -280,7 +280,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.auditStatus.status == 1)
+                                .filter((branch) => branch.status == 1)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex
@@ -314,7 +314,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                             {branches
-                                .filter((branch) => branch.auditStatus.status == 2)
+                                .filter((branch) => branch.status == 2)
                                 .map((branch: any, id: any) => {
                                     return (
                                         <Flex

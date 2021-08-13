@@ -45,7 +45,7 @@ export default function SidebarMenu3({ user, branches }): React.ReactElement {
                 </Text>
                 <Box p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
                     {branches
-                        .filter((branch) => branch.owner.id != user._id && branch.auditStatus.status === 0)
+                        .filter((branch) => branch.owner.id != user._id && branch.status === 0 && branch.slug !="main")
                         .map((branch: any, id: any) => {
                             return (
                                 <Flex

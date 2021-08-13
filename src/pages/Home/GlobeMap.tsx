@@ -180,9 +180,14 @@ export default class GlobeMap extends React.Component<any, globeState> {
     }
 
     componentDidUpdate(prevProps:any) {
-        if (this.props.exportMap) {
+        if (this.props.exportMap[0]) {
             this.state.layer.queryFeatures().then((result: any) => {
-                this.props.publishNewBranch((this.formatLayer(result.features)))
+                if (this.props.exportMap[1] == "branch") {
+                    this.props.publishNewBranch((this.formatLayer(result.features)))
+                }
+                else {
+                    this.props.publishNewModification((this.formatLayer(result.features)))
+                }
             });
             
         }
