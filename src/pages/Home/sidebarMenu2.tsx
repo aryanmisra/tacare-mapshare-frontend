@@ -4,15 +4,21 @@ import * as globalVars from "../../globalVars";
 import "./home.css";
 import "./sidebar.css";
 
-
-
-export default function SidebarMenu2({ user, branches, setMenuMode, currentBranch, setCurrentBranch, startNewBranch, currentCommit, setCurrentCommit }): React.ReactElement {
+export default function SidebarMenu2({
+    user,
+    branches,
+    setMenuMode,
+    currentBranch,
+    setCurrentBranch,
+    startNewBranch,
+    currentCommit,
+    setCurrentCommit,
+}): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
 
-
     const createBranch = () => {
-        startNewBranch()
-    }
+        startNewBranch();
+    };
 
     const notLoggedIn = (
         <div className="sidebar-inner-container">
@@ -75,7 +81,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                                             justifyContent="space-between"
                                         >
                                             <Text color="white" pl="8" fontWeight="light">
-                                            Branch #{branch.slug}
+                                                Branch #{branch.slug}
                                             </Text>
                                             <Text
                                                 color="white"
@@ -109,7 +115,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                                             justifyContent="space-between"
                                         >
                                             <Text color="white" pl="8" fontWeight="light">
-                                            Branch #{branch.slug}
+                                                Branch #{branch.slug}
                                             </Text>
                                             <Text
                                                 color="white"
@@ -143,7 +149,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                                             justifyContent="space-between"
                                         >
                                             <Text color="white" pl="8" fontWeight="light">
-                                            Branch #{branch.slug}
+                                                Branch #{branch.slug}
                                             </Text>
                                             <Text
                                                 color="white"
@@ -184,7 +190,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                                     justifyContent="space-between"
                                 >
                                     <Text color="white" pl="8" fontWeight="light">
-                                    Branch #{branch.slug}
+                                        Branch #{branch.slug}
                                     </Text>
                                     <Text
                                         color="white"
@@ -353,11 +359,11 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
     );
 
     if (user) {
-    if (user.userType == "user") {
-        return expert;
-    } else if (user.userType == "admin") {
-        return admin;
-    }
+        if (user.userType == "user") {
+            return expert;
+        } else if (user.userType == "admin") {
+            return admin;
+        }
     }
     return notLoggedIn;
 }

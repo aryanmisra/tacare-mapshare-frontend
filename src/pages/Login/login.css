@@ -1,7 +1,17 @@
-html, body {
-    background:#202124 !important;
+html,
+body {
+    background: #202124 !important;
 }
 
-h1, h2, h3, h4, h5, h6, span, p, button, input {
-    color:white !important;
-} 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+p,
+button,
+input {
+    color: white !important;
+}

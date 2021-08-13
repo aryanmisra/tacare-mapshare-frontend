@@ -4,38 +4,56 @@ import * as globalVars from "../../globalVars";
 import "./home.css";
 import "./sidebar.css";
 import { BiArrowBack } from "react-icons/bi";
-import {getBranchCommits} from "../../services/branch";
+import { getBranchCommits } from "../../services/branch";
 
-export default function SidebarMenu4({ user, branches, setMenuMode, currentBranch, setCurrentBranch, currentCommit, setCurrentCommit, setSpeciesCardOpen}): React.ReactElement {
+export default function SidebarMenu4({
+    user,
+    branches,
+    setMenuMode,
+    currentBranch,
+    setCurrentBranch,
+    currentCommit,
+    setCurrentCommit,
+    setSpeciesCardOpen,
+}): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
-    const [commits, setCommits] = useState([])
+    const [commits, setCommits] = useState([]);
 
-    function compare( a, b ) {
-        if ( a.order > b.order ){
-          return -1;
+    function compare(a, b) {
+        if (a.order > b.order) {
+            return -1;
         }
-        if ( a.order < b.order ){
-          return 1;
+        if (a.order < b.order) {
+            return 1;
         }
         return 0;
-      }
+    }
 
-    useEffect(()=>{
-            if (currentBranch) {
-                getBranchCommits(currentBranch.slug).then((resp)=>{
-                    setCommits(resp.data)
-                    setCurrentCommit(resp.data.sort(compare)[0])
-                    setSpeciesCardOpen(true)
-                    console.log(resp.data)
-                })
-            }
-    },[currentBranch])
+    useEffect(() => {
+        if (currentBranch) {
+            getBranchCommits(currentBranch.slug).then((resp) => {
+                setCommits(resp.data);
+                setCurrentCommit(resp.data.sort(compare)[0]);
+                setSpeciesCardOpen(true);
+                console.log(resp.data);
+            });
+        }
+    }, [currentBranch]);
 
     const mainMenu = currentBranch && (
         <div className="sidebar-inner-container">
             <div className="sidebar-title-container">
                 <h1>
-                    <BiArrowBack size={30} color="white" style={{ display: "inline", marginTop: -4 }} onClick={() => {setMenuMode(1);setCurrentBranch(null);setCurrentCommit(null)}} />
+                    <BiArrowBack
+                        size={30}
+                        color="white"
+                        style={{ display: "inline", marginTop: -4 }}
+                        onClick={() => {
+                            setMenuMode(1);
+                            setCurrentBranch(null);
+                            setCurrentCommit(null);
+                        }}
+                    />
                     &nbsp;Branch #{currentBranch.slug}
                 </h1>
             </div>

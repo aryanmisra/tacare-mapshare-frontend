@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, ButtonProps, Text } from "@chakra-ui/react";
-import * as globalVars from "../../globalVars"
+import * as globalVars from "../../globalVars";
 import { HiArrowRight } from "react-icons/hi";
 
 interface BlueButtonProps extends ButtonProps {
