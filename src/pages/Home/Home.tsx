@@ -19,8 +19,24 @@ import {getAllBranches} from "../../services/branch";
 import Branch from "../../interfaces/Branch";
 import "./home.css";
 import { logout } from "../../helpers/persistence";
-import {getBranchCommits} from "../../services/branch";
+import {getBranchCommits, createBranch} from "../../services/branch";
 import {loadModules} from "esri-loader";
+
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Button,
+    useDisclosure,
+    FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  } from "@chakra-ui/react"
 
 export function Home(): React.ReactElement {
     const [loaded, setLoaded] = useState(false);
@@ -29,15 +45,20 @@ export function Home(): React.ReactElement {
     const [user, setUser] = useState(null);
     const [currentBranch, setCurrentBranch] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState([-500, -500, -500, -500]);
-    const [mapEditMode, setMapEditMode] = useState(true);
+    const [mapEditMode, setMapEditMode] = useState(false);
     // const [currentCommit, setCurrentCommit] = useState({id:"asdasdasdasd", note:'ASDASDASDASDASD'});
     const [currentCommit, setCurrentCommit] = useState(null);
     const [speciesCardOpen, setSpeciesCardOpen] = useState(true);
     const userValue = useRecoilValue(userState);
     const loggedIn = useRecoilValue(loggedInState);
     const [branches, setBranches] = useState<Branch[]>([]);
-    const [homeCommit, setHomeCommit] = useState([])
+    const [homeCommit, setHomeCommit] = useState(null)
+    const [master, setMaster] = useState(null)
+    const [newBranchInfo, setNewBranchInfo] = useState(null)
+    const [exportMap, setExportMap] = useState(false)
     // console.log(userValue, loggedIn);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
     function compare( a, b ) {
         if ( a.order > b.order ){
           return -1;
@@ -68,6 +89,38 @@ export function Home(): React.ReactElement {
         return processPolygon(temp)
     }
 
+    function publishNewBranch(layerInfo) {
+        // console.log(newBranchInfo.branchNote, newBranchInfo.commitNote, layerInfo, newBranchInfo.conservationSlug)
+        createBranch(newBranchInfo.branchNote, newBranchInfo.commitNote, layerInfo, newBranchInfo.conservationSlug).then(()=>{window.location.assign("/")})
+    }
+
+    function startNewBranch() {
+        setMapEditMode(true);
+        onOpen();
+        // setCurrentCommit(master)
+        document.getElementsByClassName("navbar-container")[0].style.display = "none"
+        document.getElementById("sidebar-container1").style.display = "none"
+        document.getElementById("sidebar-container2").style.display = "none"
+        document.getElementById("sidebar-container3").style.display = "none"
+        document.getElementById("sidebar-container4").style.display = "none"
+    }
+    function stopNewBranch() {
+        setMapEditMode(false);
+        setCurrentCommit(null)
+        setNewBranchInfo(null)
+        document.getElementsByClassName("navbar-container")[0].style.display = "flex"
+        document.getElementById("sidebar-container1").style.display = "block"
+        document.getElementById("sidebar-container2").style.display = "block"
+        document.getElementById("sidebar-container3").style.display = "block"
+        document.getElementById("sidebar-container4").style.display = "block"
+    }
+
+    const newBranchFormSubmitted =(e)=> {
+        e.preventDefault()
+        setNewBranchInfo({branchNote:e.target[0].value, commitNote:e.target[1].value, conservationSlug:currentSpecies.slug})
+        onClose()
+    }
+
     useEffect(() => {
         if (loggedIn) {
             setUser(userValue)
@@ -75,8 +128,10 @@ export function Home(): React.ReactElement {
                 .then((response) => {
                     setBranches(response.data);
                     getBranchCommits("main").then((resp)=>{
+                        setMaster(resp.data.sort(compare)[0])
                         const temp: any = [];
                         loadModules(["esri/Graphic", "esri/layers/GraphicsLayer", "esri/geometry/Polygon"]).then(([Graphic, GraphicsLayer, Polygon]) => {
+                            console.log(resp.data.sort(compare)[0].features)
                             resp.data.sort(compare)[0].features.forEach((feature:any)=>{
                             const graphic = new Graphic({
                                 geometry: new Polygon(processPolygon(JSON.parse(feature.geometry))),
@@ -95,20 +150,57 @@ export function Home(): React.ReactElement {
     useEffect(() => {
         if (menuMode == -1) {
             setSidebarOpen([-500, -500, -500, -500]);
+            setCurrentBranch(null);setCurrentCommit(null)
         } else if (menuMode == 0) {
             setSidebarOpen([55, -500, -500, -500]);
+            setCurrentBranch(null);setCurrentCommit(null)
         } else if (menuMode == 1) {
             setSidebarOpen([-500, 55, -500, -500]);
         } else if (menuMode == 2) {
             setSidebarOpen([-500, -500, 55, -500]);
+            setCurrentBranch(null);setCurrentCommit(null)
         } else {
             setSidebarOpen([-500, 55, -500, 55]);
         }
     }, [menuMode]);
+
+    useEffect(() => {
+        if (!isOpen && !newBranchInfo) {
+            stopNewBranch()
+        }
+    }, [isOpen]);
     
 
     return (
         <>
+
+<Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Creat a new branch</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          <form onSubmit={newBranchFormSubmitted}>
+          <FormControl id="branch-note">
+            <FormLabel>Branch note</FormLabel>
+            <Textarea required placeholder="Enter your branch's note" />
+            </FormControl>
+            <FormControl id="branch-note">
+            <FormLabel mt="4">Commit note</FormLabel>
+            <Textarea required placeholder="Enter your initial commit's note" />
+            </FormControl>
+            <Flex mt="4" flexDir="row" justifyContent="flex-end">
+            <Button  bgColor={globalVars.colors.gray1} mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button type="submit" bgColor={globalVars.colors.blue2}>Continue</Button>
+            </Flex>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+
             <div style={{pointerEvents:!loaded?'auto':'none', opacity:!loaded?1:0, transition: '0.5s cubic-bezier(.69,.09,.37,.94)'}} className="loading-container">
                 <div className="loading-text-container">
                     <h1>TACARE MAPSHARE</h1>
@@ -119,7 +211,7 @@ export function Home(): React.ReactElement {
 
             <div className="body-container">
                 <div className="globe-container">
-                    <GlobeMap homeCommit={homeCommit} mapEditMode={mapEditMode} setLoaded={setLoaded} currentCommit={currentCommit}/>
+                    <GlobeMap publishNewBranch={publishNewBranch} exportMap={exportMap} homeCommit={homeCommit} mapEditMode={mapEditMode} setLoaded={setLoaded} currentCommit={currentCommit}/>
                 </div>
                 <div className="navbar-container">
                     <div className="link-container">
@@ -178,6 +270,7 @@ export function Home(): React.ReactElement {
                         user={user}
                         currentCommit={currentCommit}
                         setCurrentCommit={setCurrentCommit}
+                        startNewBranch={startNewBranch}
                     />
                 </div>
                 <div id="sidebar-container3" className="sidebar-container" style={{marginLeft: sidebarOpen[2]}}>
@@ -232,7 +325,8 @@ export function Home(): React.ReactElement {
                 </div>
                 {mapEditMode && (
                     <div className="modify-layer-container">
-                        <button>Submit changes</button>
+                        <button onClick={()=>setExportMap(true)} className="modify-button-1">Submit changes</button>
+                        <button onClick={stopNewBranch} className="modify-button-2">Cancel</button>
                     </div>
                 )}
             </div>

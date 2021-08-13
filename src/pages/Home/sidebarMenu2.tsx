@@ -6,8 +6,14 @@ import "./sidebar.css";
 
 
 
-export default function SidebarMenu2({ user, branches, setMenuMode, currentBranch, setCurrentBranch, currentCommit, setCurrentCommit }): React.ReactElement {
+export default function SidebarMenu2({ user, branches, setMenuMode, currentBranch, setCurrentBranch, startNewBranch, currentCommit, setCurrentCommit }): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
+
+
+    const createBranch = () => {
+        startNewBranch()
+    }
+
     const notLoggedIn = (
         <div className="sidebar-inner-container">
             <div className="sidebar-title-container">
@@ -205,6 +211,7 @@ export default function SidebarMenu2({ user, branches, setMenuMode, currentBranc
                 color="white"
                 w="380px"
                 _hover={{ bgColor: globalVars.colors.blue1 }}
+                onClick={createBranch}
             >
                 Create a new branch
             </Button>

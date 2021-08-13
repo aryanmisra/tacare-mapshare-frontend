@@ -89,9 +89,18 @@ export default class GlobeMap extends React.Component<any, globeState> {
         this.handleFail = this.handleFail.bind(this);
     }
     
+    formatLayer = (layerInfo:any) => {
+        const temp = []
+        layerInfo.map((feature)=> {
+            temp.push({ attributes:feature.attributes, geometry: JSON.stringify(feature.geometry.rings)})
+        })
+        return temp
+    }
+
     switchLayers = (newLayer:any) => {
         if (this.state.layer) {
             this.state.layer.queryFeatures().then((result: any) => {
+                console.log(result.features)
                 this.state.layer.applyEdits({deleteFeatures:result.features})
             });
         }
@@ -171,6 +180,13 @@ export default class GlobeMap extends React.Component<any, globeState> {
     }
 
     componentDidUpdate(prevProps:any) {
+        if (this.props.exportMap) {
+            this.state.layer.queryFeatures().then((result: any) => {
+                this.props.publishNewBranch((this.formatLayer(result.features)))
+            });
+            
+        }
+        
         if (this.props.homeCommit && !this.state.initalLoad && this.state.layer) {
             this.setState({initalLoad:true})
             this.switchLayers(this.props.homeCommit)
@@ -207,7 +223,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
             this.setState({editorLoaded: true});
         }
         if (this.props.mapEditMode && this.state.editorLoaded) {
-            document.getElementsByClassName("esri-ui-top-right")[0].style.display = "auto";
+            document.getElementsByClassName("esri-ui-top-right")[0].style.display = "block";
         } else if (this.state.editorLoaded) {
             document.getElementsByClassName("esri-ui-top-right")[0].style.display = "none";
         }
