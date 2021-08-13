@@ -158,6 +158,7 @@ export function Home(): React.ReactElement {
     useEffect(() => {
         if (loggedIn) {
             setUser(userValue)
+            console.log(userValue)
             getAllBranches()
                 .then((response) => {
                     // console.log(response.data)      

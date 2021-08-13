@@ -5,6 +5,7 @@ import "./home.css";
 import "./sidebar.css";
 import {BiArrowBack} from "react-icons/bi";
 import {getBranchCommits, deleteBranch, revertCommits, mergeBranch} from "../../services/branch";
+import {startVirtualAudit} from "../../services/audit";
 import {
     Modal,
     ModalOverlay,
@@ -44,6 +45,7 @@ export default function SidebarMenu4({startNewModification, user, branches, setM
                 console.log(resp.data);
             });
         }
+        console.log(currentBranch)
     }, [currentBranch]);
 
     const mainMenu = currentBranch && (
@@ -207,6 +209,19 @@ export default function SidebarMenu4({startNewModification, user, branches, setM
                 </Tabs>
                 {user && user.userType == "admin" && currentBranch.status == 0 && (
                     <>
+                    <Button
+                            pos="fixed"
+                            bottom="145px"
+                            p="6"
+                            fontWeight="light"
+                            bgColor={globalVars.colors.blue2}
+                            color="white"
+                            w="380px"
+                            _hover={{bgColor: globalVars.colors.blue1}}
+                            onClick={() => startVirtualAudit(currentBranch.slug, user._id)}
+                        >
+                            {currentBranch.auditStatus.envelopeId != ""?"Res":"S"}tart Virtual audit
+                        </Button>
                         <Button
                             pos="fixed"
                             bottom="85px"
