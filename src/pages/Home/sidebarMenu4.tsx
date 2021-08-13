@@ -4,17 +4,38 @@ import * as globalVars from "../../globalVars";
 import "./home.css";
 import "./sidebar.css";
 import { BiArrowBack } from "react-icons/bi";
+import {getBranchCommits} from "../../services/branch";
 
-export default function SidebarMenu4({ user, branches, setMenuMode, currentBranch, setCurrentBranch }): React.ReactElement {
+export default function SidebarMenu4({ user, branches, setMenuMode, currentBranch, setCurrentBranch, currentCommit, setCurrentCommit, setSpeciesCardOpen}): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
+    const [commits, setCommits] = useState([])
 
-    const edits = [{ id: "12334523415" }, { id: "6231323415" }, { id: "3536423415" }, { id: "920434523415" }, { id: "888334523415" }, { id: "1223423415" }];
+    function compare( a, b ) {
+        if ( a.order > b.order ){
+          return -1;
+        }
+        if ( a.order < b.order ){
+          return 1;
+        }
+        return 0;
+      }
+
+    useEffect(()=>{
+            if (currentBranch) {
+                getBranchCommits(currentBranch.slug).then((resp)=>{
+                    setCommits(resp.data)
+                    setCurrentCommit(resp.data.sort(compare)[0])
+                    setSpeciesCardOpen(true)
+                    console.log(resp.data)
+                })
+            }
+    },[currentBranch])
 
     const mainMenu = currentBranch && (
         <div className="sidebar-inner-container">
             <div className="sidebar-title-container">
                 <h1>
-                    <BiArrowBack size={30} color="white" style={{ display: "inline", marginTop: -4 }} onClick={() => setMenuMode(1)} />
+                    <BiArrowBack size={30} color="white" style={{ display: "inline", marginTop: -4 }} onClick={() => {setMenuMode(1);setCurrentBranch(null);setCurrentCommit(null)}} />
                     &nbsp;Branch #{currentBranch.slug}
                 </h1>
             </div>
@@ -44,7 +65,7 @@ export default function SidebarMenu4({ user, branches, setMenuMode, currentBranc
                 Overview of Changes
             </Text>
             <Box p="0" pl="2" pr="2" mt="3" maxH="174px" overflowY="auto">
-                {edits.map((edit: any, id: any) => {
+                {commits.sort(compare).map((commit: any, id: any) => {
                     return (
                         <Flex
                             key={id}
@@ -58,14 +79,16 @@ export default function SidebarMenu4({ user, branches, setMenuMode, currentBranc
                             justifyContent="space-between"
                         >
                             <Text color="white" pl="8" fontWeight="light">
-                                ID#: {edit.id}
+                                ID#: {commit.slug} {id == 0 && "(current)"}
                             </Text>
                             <Text
                                 color="white"
                                 pr="8"
                                 fontWeight="light"
+                                cursor="pointer"
                                 onClick={() => {
-                                    console.log("attempt to view");
+                                    setCurrentCommit(commit);
+                                    setSpeciesCardOpen(true);
                                 }}
                             >
                                 View

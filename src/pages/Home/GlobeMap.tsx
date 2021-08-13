@@ -12,6 +12,7 @@ interface globeState {
     view: any | null;
     editorLoaded: boolean;
     layer:any;
+    initalLoad:boolean;
 }
 
 function getDepth(arr:any[], depth:number):any {
@@ -35,7 +36,6 @@ function processPolygon(arr:any[]):any {
 }
 
 let easternChimpanzeeLayer: any;
-let graphics: any = [];
 const fields = [
     {
         name: "ID_NO",
@@ -44,7 +44,7 @@ const fields = [
     }, {
         name: "POPULATION",
         alias: "POPULATION",
-        type: "string"
+        type: "integer"
     }, {
         name: "SUBSPECIES",
         alias: "SUBSPECIES",
@@ -66,6 +66,11 @@ const fields = [
         name: "YEAR",
         alias: "YEAR",
         type: "integer"
+    },
+    {
+        name: "NAME",
+        alias: "NAME",
+        type: "string"
     }];
 
 
@@ -73,6 +78,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
     constructor (props: any) {
         super(props);
         this.state = {
+            initalLoad: false,
             status: "loading",
             map: null,
             view: null,
@@ -82,79 +88,28 @@ export default class GlobeMap extends React.Component<any, globeState> {
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.handleFail = this.handleFail.bind(this);
     }
-
+    
     switchLayers = (newLayer:any) => {
-        this.state.layer.queryFeatures().then((result: any) => {
-            this.state.layer.applyEdits({deleteFeatures:result.features})
-        });
         if (this.state.layer) {
-            this.state.layer.applyEdits({addFeatures:newLayer})
+            this.state.layer.queryFeatures().then((result: any) => {
+                this.state.layer.applyEdits({deleteFeatures:result.features})
+            });
+        }
+        if (this.state.layer) {
+            this.state.layer.applyEdits({addFeatures:newLayer})            
         }
     }
 
     loadLayer = () => {
-        loadModules(["esri/Graphic", "esri/layers/GraphicsLayer", "esri/geometry/Polygon"]).then(([Graphic, GraphicsLayer, Polygon]) => {
-            const graphicsLayer = new GraphicsLayer();
-            this.state.map.add(graphicsLayer);
-            const polygonGraphic1 = new Graphic({
-                geometry: new Polygon(processPolygon(polygon1)),
-                attributes: {
-                    ID_NO: 15933,
-                    POPULATION: 12000,
-                    SUBSPECIES: "ellioti",
-                    BINOMIAL: "Pan troglodytes",
-                    CITATION: "IUCN (International Union for Conservation of Nature)",
-                    COMPILER: "IUCN SSC A.P.E.S. Database",
-                    YEAR: "2018"
-                },
-            });
-            const polygonGraphic2 = new Graphic({
-                geometry: new Polygon(processPolygon(polygon2)),
-                attributes: {
-                    ID_NO: 12943,
-                    POPULATION: 2400,
-                    SUBSPECIES: "troglodytes",
-                    BINOMIAL: "Pan troglodytes",
-                    CITATION: "IUCN (International Union for Conservation of Nature)",
-                    COMPILER: "UNEP-WCMC, Lilian Pintea, Jane Goodall Institute",
-                    YEAR: "2018"
-                },
-            });
-            const polygonGraphic3 = new Graphic({
-                geometry: new Polygon(processPolygon(polygon3)),
-                attributes: {
-                    ID_NO: 95441,
-                    POPULATION: 105,
-                    SUBSPECIES: "schweinfurthii",
-                    BINOMIAL: "Pan troglodytes",
-                    CITATION: "IUCN (International Union for Conservation of Nature)",
-                    COMPILER: "Lilian Pintea, Jane Goodall Institute, IUCN SSC A.P.E.S. Database",
-                    YEAR: "2018"
-                },
-            });
-            const polygonGraphic4 = new Graphic({
-                geometry: new Polygon(processPolygon(polygon4)),
-                attributes: {
-                    ID_NO: 61445,
-                    POPULATION: 10000,
-                    SUBSPECIES: "verus",
-                    BINOMIAL: "Pan troglodytes",
-                    CITATION: "IUCN (International Union for Conservation of Nature)",
-                    COMPILER: "IUCN SSC A.P.E.S. Database",
-                    YEAR: "2018"
-                },
-            });
-            graphics = [polygonGraphic1, polygonGraphic2, polygonGraphic3, polygonGraphic4]
-        }).then(() => {
-
             loadModules(["esri/layers/FeatureLayer"])
                 .then(([FeatureLayer]) => {
                     easternChimpanzeeLayer = new FeatureLayer({
                         supportsEditing: true,
                         supportsAdd: true,
-                        source: [graphics[2], graphics[3]],
+                        source: [],
                         fields: fields,
                         objectIdField: "ID_NO",
+                        displayField:"NAME",
                         renderer: {
                             type: "simple",
                             symbol: {
@@ -204,7 +159,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
                             },
                         ],
                         popupTemplate: globalVars.ChimpLayerWidgetConfig,
-                        outFields: ["POPULATION", "BINOMIAL", "CITATION", "COMPILER", "ID_NO", "SUBSPECIES", "YEAR",],
+                        outFields: ["NAME","POPULATION", "BINOMIAL", "CITATION", "COMPILER", "ID_NO", "SUBSPECIES", "YEAR",],
                         title: "Chimpanzee",
 
                     });
@@ -212,14 +167,32 @@ export default class GlobeMap extends React.Component<any, globeState> {
                         this.state.map.add(easternChimpanzeeLayer);
                     }
                     this.setState({layer:easternChimpanzeeLayer});
-                    setTimeout(() => {
-                        this.switchLayers(graphics)
-                    }, 2000);
                 })
-        });
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps:any) {
+        if (this.props.homeCommit && !this.state.initalLoad && this.state.layer) {
+            this.setState({initalLoad:true})
+            this.switchLayers(this.props.homeCommit)
+        }
+        if (this.props.currentCommit != prevProps.currentCommit) {
+            if (this.props.currentCommit) {
+                const temp: any = [];
+                loadModules(["esri/Graphic", "esri/layers/GraphicsLayer", "esri/geometry/Polygon"]).then(([Graphic, GraphicsLayer, Polygon]) => {
+                this.props.currentCommit.features.forEach((feature:any)=>{
+                     const graphic = new Graphic({
+                        geometry: new Polygon(processPolygon(JSON.parse(feature.geometry))),
+                        attributes: feature.attributes
+                    });
+                    temp.push(graphic)  
+                })
+                this.switchLayers(temp)
+            })
+            }
+            else {
+                this.switchLayers(this.props.homeCommit)
+            }
+        }
         // if the view exists
         if (this.state.map && this.state.view && !this.state.editorLoaded) {
             this.loadLayer()

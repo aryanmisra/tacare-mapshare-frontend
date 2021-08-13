@@ -6,9 +6,8 @@ import "./sidebar.css";
 
 
 
-export default function SidebarMenu2({ user, branches, setMenuMode, currentBranch, setCurrentBranch }): React.ReactElement {
+export default function SidebarMenu2({ user, branches, setMenuMode, currentBranch, setCurrentBranch, currentCommit, setCurrentCommit }): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
-
     const notLoggedIn = (
         <div className="sidebar-inner-container">
             <div className="sidebar-title-container">

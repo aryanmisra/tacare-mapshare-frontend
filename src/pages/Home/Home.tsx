@@ -19,6 +19,8 @@ import {getAllBranches} from "../../services/branch";
 import Branch from "../../interfaces/Branch";
 import "./home.css";
 import { logout } from "../../helpers/persistence";
+import {getBranchCommits} from "../../services/branch";
+import {loadModules} from "esri-loader";
 
 export function Home(): React.ReactElement {
     const [loaded, setLoaded] = useState(false);
@@ -27,23 +29,67 @@ export function Home(): React.ReactElement {
     const [user, setUser] = useState(null);
     const [currentBranch, setCurrentBranch] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState([-500, -500, -500, -500]);
-    const [mapEditMode, setMapEditMode] = useState(false);
+    const [mapEditMode, setMapEditMode] = useState(true);
+    // const [currentCommit, setCurrentCommit] = useState({id:"asdasdasdasd", note:'ASDASDASDASDASD'});
+    const [currentCommit, setCurrentCommit] = useState(null);
     const [speciesCardOpen, setSpeciesCardOpen] = useState(true);
     const userValue = useRecoilValue(userState);
     const loggedIn = useRecoilValue(loggedInState);
     const [branches, setBranches] = useState<Branch[]>([]);
-    console.log(userValue, loggedIn);
+    const [homeCommit, setHomeCommit] = useState([])
+    // console.log(userValue, loggedIn);
+    function compare( a, b ) {
+        if ( a.order > b.order ){
+          return -1;
+        }
+        if ( a.order < b.order ){
+          return 1;
+        }
+        return 0;
+      }
+
+      function getDepth(arr:any[], depth:number):any {
+        if (!arr[0]) {
+            return depth
+        }
+        else {
+            return getDepth(arr[0], depth + 1)
+        }
+    }
+
+      function processPolygon(arr:any[]):any {
+        if (getDepth(arr, 0) == 3) {
+            return arr
+        }
+        const temp = []
+        for (let i =0;i<arr.length;i++) {
+            temp.push(...arr[i])
+        }
+        return processPolygon(temp)
+    }
 
     useEffect(() => {
         if (loggedIn) {
             setUser(userValue)
             getAllBranches()
                 .then((response) => {
-                    console.log(response.data);
                     setBranches(response.data);
+                    getBranchCommits("main").then((resp)=>{
+                        const temp: any = [];
+                        loadModules(["esri/Graphic", "esri/layers/GraphicsLayer", "esri/geometry/Polygon"]).then(([Graphic, GraphicsLayer, Polygon]) => {
+                            resp.data.sort(compare)[0].features.forEach((feature:any)=>{
+                            const graphic = new Graphic({
+                                geometry: new Polygon(processPolygon(JSON.parse(feature.geometry))),
+                                attributes: feature.attributes
+                            });
+                            temp.push(graphic)  
+                        })
+                    })
+                    setHomeCommit(temp)
                 })
                 .catch((error) => console.error);
-        }
+        })
+    }
     }, []);
 
     useEffect(() => {
@@ -58,8 +104,8 @@ export function Home(): React.ReactElement {
         } else {
             setSidebarOpen([-500, 55, -500, 55]);
         }
-        console.log(menuMode)
     }, [menuMode]);
+    
 
     return (
         <>
@@ -73,7 +119,7 @@ export function Home(): React.ReactElement {
 
             <div className="body-container">
                 <div className="globe-container">
-                    <GlobeMap mapEditMode={mapEditMode} setLoaded={setLoaded} />
+                    <GlobeMap homeCommit={homeCommit} mapEditMode={mapEditMode} setLoaded={setLoaded} currentCommit={currentCommit}/>
                 </div>
                 <div className="navbar-container">
                     <div className="link-container">
@@ -130,6 +176,8 @@ export function Home(): React.ReactElement {
                         setMenuMode={setMenuMode}
                         branches={branches}
                         user={user}
+                        currentCommit={currentCommit}
+                        setCurrentCommit={setCurrentCommit}
                     />
                 </div>
                 <div id="sidebar-container3" className="sidebar-container" style={{marginLeft: sidebarOpen[2]}}>
@@ -142,6 +190,9 @@ export function Home(): React.ReactElement {
                         setMenuMode={setMenuMode}
                         branches={branches}
                         user={user}
+                        currentCommit={currentCommit}
+                        setCurrentCommit={setCurrentCommit}
+                        setSpeciesCardOpen={setSpeciesCardOpen}
                     />
                 </div>
                 <div className="title-container">
@@ -169,14 +220,14 @@ export function Home(): React.ReactElement {
                         onClick={() => setSpeciesCardOpen(false)}
                     />
                     <Text color={globalVars.colors.white} mt="4" ml="4" mr="4" fontSize="18px">
-                        {currentSpecies.name}
+                        {currentCommit?`Commit #${currentCommit.slug} Note:`:currentSpecies.name}
                     </Text>
-                    <Text color={globalVars.colors.white} mt="2" ml="4" mr="4" lineHeight="16px" fontSize="14px">
-                        {currentSpecies.description}
+                    <Text color={globalVars.colors.white} mt="2" ml="4" mr="4" lineHeight="16px" fontSize="12px">
+                        {currentCommit?currentCommit.note:currentSpecies.description}
                     </Text>
                     <br></br>
-                    <Text color={globalVars.colors.white} mt="2" ml="4" mr="4" lineHeight="16px" fontSize="14px">
-                        Current Global Count: 1566
+                    <Text color={globalVars.colors.white} mt="-10px" ml="4" mr="4" lineHeight="16px" fontSize="12px">
+                    {!currentCommit && "Current Global Count: 1566"}
                     </Text>
                 </div>
                 {mapEditMode && (
