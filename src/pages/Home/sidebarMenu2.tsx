@@ -13,6 +13,7 @@ export default function SidebarMenu2({
     startNewBranch,
     currentCommit,
     setCurrentCommit,
+    currentSpecies,
 }): React.ReactElement {
     const [filter1, setFilter1] = useState(0);
 
@@ -235,7 +236,7 @@ export default function SidebarMenu2({
                     All Branches
                 </Text>
                 <Text fontSize="14px" color="white" lineHeight="16px">
-                    Manage all West African Chimpanzee branches here
+                    Manage all {currentSpecies.name} branches here
                 </Text>
                 <Tabs variant="soft-rounded" align="center" mt="4" w="full" onChange={(index) => setFilter1(index)}>
                     <TabList w="full" justifyContent="space-evenly" bgColor={globalVars.colors.gray2} borderRadius="100">

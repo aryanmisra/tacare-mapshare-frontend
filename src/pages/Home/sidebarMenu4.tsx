@@ -4,8 +4,9 @@ import * as globalVars from "../../globalVars";
 import "./home.css";
 import "./sidebar.css";
 import {BiArrowBack} from "react-icons/bi";
+import {AiOutlineReload} from "react-icons/ai";
 import {getBranchCommits, deleteBranch, revertCommits, mergeBranch} from "../../services/branch";
-import {startVirtualAudit, auditImageUpload} from "../../services/audit";
+import {startVirtualAudit, auditImageUpload, updateAuditStatus} from "../../services/audit";
 import {
     Modal,
     ModalOverlay,
@@ -66,6 +67,10 @@ export default function SidebarMenu4({startNewModification, user, branches, setM
                 })
             });
         }
+    }
+
+    function reloadStats() {
+        updateAuditStatus(currentBranch.slug)
     }
 
     useEffect(() => {
@@ -237,7 +242,7 @@ export default function SidebarMenu4({startNewModification, user, branches, setM
                     })}
                 </Box>
                 <Text mt="4" color="white" fontSize="20px">
-                    Stakeholder Decisions
+                    Stakeholder Decisions <AiOutlineReload onClick={()=>reloadStats()} size={20} style={{marginTop:-4, display:'inline'}} color={"white"}/>
                 </Text>
                 <Text color="white" fontSize="14px" lineHeight="16px">
                     The virtual audit has not been started.{" "}

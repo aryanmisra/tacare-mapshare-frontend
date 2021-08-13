@@ -170,7 +170,7 @@ export default class GlobeMap extends React.Component<any, globeState> {
                 ],
                 popupTemplate: globalVars.ChimpLayerWidgetConfig,
                 outFields: ["NAME", "POPULATION", "BINOMIAL", "CITATION", "COMPILER", "ID_NO", "SUBSPECIES", "YEAR"],
-                title: "Chimpanzee",
+                title: this.props.currentSpecies.name,
             });
             if (!this.state.layer) {
                 this.state.map.add(easternChimpanzeeLayer);

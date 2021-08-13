@@ -1,7 +1,7 @@
 import {authClient, client} from "../index";
 
-export const getAllBranches = async () => {
-    return await client.get("/branch/all");
+export const getAllBranches = async (conservationSlug:string) => {
+    return await client.get(`/branch/conservation/${conservationSlug}`);
 };
 
 export const getConservations = async () => {

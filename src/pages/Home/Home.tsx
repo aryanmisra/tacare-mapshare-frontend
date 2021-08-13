@@ -159,7 +159,7 @@ export function Home(): React.ReactElement {
         if (loggedIn) {
             setUser(userValue)
             console.log(userValue)
-            getAllBranches()
+            getAllBranches(currentSpecies.slug)
                 .then((response) => {
                     // console.log(response.data)      
                     setBranches(response.data);
@@ -198,7 +198,7 @@ export function Home(): React.ReactElement {
                 setHomeCommit(temp);
             })
         }
-    }, []);
+    }, [currentSpecies]);
 
     useEffect(() => {
         if (menuMode == -1) {
@@ -315,7 +315,7 @@ export function Home(): React.ReactElement {
 
             <div className="body-container">
                 <div className="globe-container">
-                    <GlobeMap publishNewModification={publishNewModification} publishNewBranch={publishNewBranch} exportMap={exportMap} homeCommit={homeCommit} mapEditMode={mapEditMode} setLoaded={setLoaded} currentCommit={currentCommit} />
+                    <GlobeMap currentSpecies={currentSpecies} publishNewModification={publishNewModification} publishNewBranch={publishNewBranch} exportMap={exportMap} homeCommit={homeCommit} mapEditMode={mapEditMode} setLoaded={setLoaded} currentCommit={currentCommit} />
                 </div>
                 <div className="navbar-container">
                     <div className="link-container">
@@ -375,10 +375,14 @@ export function Home(): React.ReactElement {
                         currentCommit={currentCommit}
                         setCurrentCommit={setCurrentCommit}
                         startNewBranch={startNewBranch}
+                        currentSpecies={currentSpecies}
                     />
                 </div>
                 <div id="sidebar-container3" className="sidebar-container" style={{marginLeft: sidebarOpen[2]}}>
-                    <SidebarMenu3 user={user} branches={branches} />
+                    <SidebarMenu3 
+                    user={user} 
+                    branches={branches} 
+                    currentSpecies={currentSpecies}/>
                 </div>
                 <div id="sidebar-container4" className="sidebar-container" style={{marginLeft: sidebarOpen[3]}}>
                     <SidebarMenu4
@@ -409,7 +413,7 @@ export function Home(): React.ReactElement {
                                 window.location.assign("/");
                             }}
                         >
-                            LOGOUT
+                            LOGOUT ({user && user.userType.toUpperCase()})
                         </button>
                     </div>
                 )}
@@ -431,9 +435,9 @@ export function Home(): React.ReactElement {
                         {currentCommit ? currentCommit.note : currentSpecies.description}
                     </Text>
                     <br></br>
-                    <Text color={globalVars.colors.white} mt="-10px" ml="4" mr="4" lineHeight="16px" fontSize="12px">
+                    {/* <Text color={globalVars.colors.white} mt="-10px" ml="4" mr="4" lineHeight="16px" fontSize="12px">
                         {!currentCommit && "Current Global Count: 1566"}
-                    </Text>
+                    </Text> */}
                 </div>
                 {mapEditMode && (
                     <div className="modify-layer-container">

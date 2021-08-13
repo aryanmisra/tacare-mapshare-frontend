@@ -7,7 +7,7 @@ import { useRecoilValue } from "recoil";
 import { loggedInState, userState } from "../../store";
 import Branch from "../../interfaces/Branch";
 
-export default function SidebarMenu3({ user, branches }): React.ReactElement {
+export default function SidebarMenu3({ user, branches, currentSpecies }): React.ReactElement {
     const loggedIn = useRecoilValue(loggedInState);
     const notLoggedInView = (
         <div className="sidebar-inner-container">
@@ -38,7 +38,7 @@ export default function SidebarMenu3({ user, branches }): React.ReactElement {
             </div>
             <Box mt="8">
                 <Text fontSize="22px" color="white">
-                    West African Chimpanzee Documents
+                    {currentSpecies.name} Documents
                 </Text>
                 <Text fontSize="14px" color="white">
                     These are the docusign documents for active branches 
@@ -61,9 +61,6 @@ export default function SidebarMenu3({ user, branches }): React.ReactElement {
                                 >
                                     <Text color="white" pl="8" fontWeight="light">
                                         Branch {branch.slug}
-                                    </Text>
-                                    <Text color="white" pr="8" fontWeight="light">
-                                        View
                                     </Text>
                                 </Flex>
                             );
