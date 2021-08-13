@@ -1,1 +1,0 @@
-export { CryptoCard } from "./CryptoCard";
