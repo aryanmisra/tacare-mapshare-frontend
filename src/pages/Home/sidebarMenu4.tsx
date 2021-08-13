@@ -4,7 +4,7 @@ import * as globalVars from "../../globalVars";
 import "./home.css";
 import "./sidebar.css";
 import {BiArrowBack} from "react-icons/bi";
-import {getBranchCommits, deleteBranch, revertCommits} from "../../services/branch";
+import {getBranchCommits, deleteBranch, revertCommits, mergeBranch} from "../../services/branch";
 import {
     Modal,
     ModalOverlay,
@@ -77,7 +77,7 @@ export default function SidebarMenu4({startNewModification, user, branches, setM
                         <Button bgColor={globalVars.colors.gray1} mr={3} onClick={onCloseMergeBranch}>
                             Cancel
                         </Button>
-                        <Button bgColor={globalVars.colors.blue2}>Confirm</Button>
+                        <Button bgColor={globalVars.colors.blue2} onClick={() => mergeBranch(currentBranch.slug).then((resp) => {window.location.assign("/")})}>Confirm</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

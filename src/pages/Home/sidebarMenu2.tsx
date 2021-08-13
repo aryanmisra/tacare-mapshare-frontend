@@ -65,7 +65,7 @@ export default function SidebarMenu2({
                     </TabList>
                     <TabPanels>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches
+                            {branches.reverse()
                                 .filter((branch) => branch.slug!="main" && branch.owner.email == user.email && branch.status == 0)
                                 .map((branch: any, id: any) => {
                                     return (
@@ -99,7 +99,7 @@ export default function SidebarMenu2({
                                 })}
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches
+                            {branches.reverse()
                                 .filter((branch) => branch.slug!="main" && branch.owner.email == user.email && branch.status == 1)
                                 .map((branch: any, id: any) => {
                                     return (
@@ -133,7 +133,7 @@ export default function SidebarMenu2({
                                 })}
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches
+                            {branches.reverse()
                                 .filter((branch) => branch.slug!="main" && branch.owner.email == user.email && branch.status == 2)
                                 .map((branch: any, id: any) => {
                                     return (
@@ -174,7 +174,7 @@ export default function SidebarMenu2({
                     Other Active Branches
                 </Text>
                 <Box p="0" pl="2" pr="2" mt="3" maxH="174px" overflowY="auto">
-                    {branches
+                    {branches.reverse()
                         .filter((branch) => branch.slug!="main" && branch.owner.email != user.email && branch.status == 0)
                         .map((branch: any, id: any) => {
                             return (
@@ -251,7 +251,7 @@ export default function SidebarMenu2({
                     </TabList>
                     <TabPanels>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches
+                            {branches.reverse()
                                 .filter((branch) => branch.slug!="main" && branch.status == 0)
                                 .map((branch: any, id: any) => {
                                     return (
@@ -285,7 +285,7 @@ export default function SidebarMenu2({
                                 })}
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches
+                            {branches.reverse()
                                 .filter((branch) => branch.status == 1)
                                 .map((branch: any, id: any) => {
                                     return (
@@ -319,7 +319,7 @@ export default function SidebarMenu2({
                                 })}
                         </TabPanel>
                         <TabPanel p="0" pl="2" pr="2" mt="6" maxH="174px" overflowY="auto">
-                            {branches
+                            {branches.reverse()
                                 .filter((branch) => branch.status == 2)
                                 .map((branch: any, id: any) => {
                                     return (

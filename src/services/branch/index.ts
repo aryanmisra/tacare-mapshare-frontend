@@ -43,9 +43,9 @@ export const deleteBranch = async (branchSlug: string) => {
 };
 
 export const revertCommits = async (commitSlug: string) => {
-    return await authClient.delete(`/commit/${commitSlug}`);
+    return await authClient.delete(`/branch/commit/${commitSlug}`);
 };
 
 export const mergeBranch = async (branchSlug: string) => {
-    return await authClient.post(`/merge/${branchSlug}`);
+    return await authClient.get(`/branch/merge/${branchSlug}`);
 };
